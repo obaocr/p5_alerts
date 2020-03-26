@@ -12,27 +12,27 @@ import com.safetynet.p5_alerts.model.Person;
 public class PersonServiceImpl implements PersonService {
 
 	@Autowired
-	private  PersonDao personDao;
-	
+	private PersonDao personDao;
+
 	@Override
 	public List<Person> getPersons() {
 		return personDao.getAll();
 	}
-	
+
 	@Override
 	public List<String> getCommunityEmails(String city) {
 		return personDao.getCommunityEmails(city);
 	}
-	
-		public boolean addPerson(Person person) {
-			return personDao.addPerson(person);
+
+	public boolean addPerson(Person person) {
+		return personDao.addPerson(person);
 	}
-	
-	@Override	
+
+	@Override
 	public boolean updatePerson(Person person) {
 		return personDao.updatePerson(person);
 	}
-	
+
 	@Override
 	public boolean deletePerson(Person person) {
 		return personDao.deletePerson(person);

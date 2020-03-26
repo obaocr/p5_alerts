@@ -130,10 +130,4 @@ public class Person {
 		this.email = email;
 	}
 
-	@Override
-	public String toString() {
-		return "Person [firstname=" + firstname + ", lastname=" + lastname + ", address=" + address + ", city=" + city
-				+ ", zip=" + zip + ", phone=" + phone + ", email=" + email + "]";
-	}
-
 }

@@ -2,12 +2,11 @@ package com.safetynet.p5_alerts.dao;
 
 import java.util.List;
 
-import com.safetynet.p5_alerts.model.FireStation;
 import com.safetynet.p5_alerts.model.MedicalRecord;
 
 public interface MedicalRecordDao {
 	// Alimentation des données initiales
-	void setMedicalRecords(List<MedicalRecord> medicalRecord);
+	void setMedicalRecords(List<MedicalRecord> medicalRecords);
 
 	// Liste des MedicalRecord
 	public List<MedicalRecord> getAll();

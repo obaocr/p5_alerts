@@ -49,13 +49,6 @@ public class MedicalRecord {
 	public void setAllergies(List<String> allergies) {
 		this.allergies = allergies;
 	}
-
-	@Override
-	public String toString() {
-		return "MedicalRecord [firstname=" + firstname + ", lastname=" + lastname + ", birthDate=" + birthDate
-				+ ", medications=" + medications + ", allergies=" + allergies + "]";
-	}
-	
 	
 
 }

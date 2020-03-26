@@ -4,15 +4,17 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import com.safetynet.p5_alerts.model.FireStation;
 
 import ch.qos.logback.classic.Logger;
 
+@Repository
 public class FireStationDaoImpl implements FireStationDao {
 
 	private static List<FireStation> fireStationData;
-	Logger log = (Logger) LoggerFactory.getLogger(PersonDaoImpl.class);
+	Logger log = (Logger) LoggerFactory.getLogger(FireStationDaoImpl.class);
 
 	public FireStationDaoImpl() {
 
@@ -97,7 +99,6 @@ public class FireStationDaoImpl implements FireStationDao {
 		if (fireStationData != null) {
 			fireStationData.clear();
 		}
-		;
 		return true;
 	}
 }

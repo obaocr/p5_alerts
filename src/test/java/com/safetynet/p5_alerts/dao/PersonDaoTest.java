@@ -48,6 +48,30 @@ class PersonDaoTest {
 		assertTrue(nbPersons + 1 == personDao.getAll().size());
 
 	}
+	
+	@Test
+	// Test mise a jour personne
+	void updatePersonTest() {
+		boolean isUpdated = false;
+		// on ajoute une personne
+		Person.Builder personlBuilder = new Person.Builder();
+		PersonDao personDao = new PersonDaoImpl();
+		Person p = personlBuilder.setFirstname("Olivier").setLastname("Martin").setAddress("address").setCity("city")
+				.setZip("zip").setPhone("phone").setEmail("email").build();
+		personDao.addPerson(p);
+		// On met a jour cette personne
+		p.setCity("Paris");
+		personDao.updatePerson(p);
+		// On recherche cette personne
+		List<Person> persons = personDao.getAll();
+		for(Person psn : persons) {
+			if (psn.getFirstname().equals("Olivier") && psn.getLastname().equals("Martin") && psn.getCity().equals("Paris")) {
+				isUpdated = true;
+			}
+		}
+		assertTrue(isUpdated == true);
+
+	}
 
 	@Test
 	// Suppression de personne

@@ -18,6 +18,8 @@ import com.jsoniter.any.Any;
 import com.jsoniter.spi.TypeLiteral;
 import com.safetynet.p5_alerts.dao.FireStationDao;
 import com.safetynet.p5_alerts.dao.FireStationDaoImpl;
+import com.safetynet.p5_alerts.dao.MedicalRecordDao;
+import com.safetynet.p5_alerts.dao.MedicalRecordDaoImpl;
 import com.safetynet.p5_alerts.dao.PersonDao;
 import com.safetynet.p5_alerts.dao.PersonDaoImpl;
 import com.safetynet.p5_alerts.model.Data;
@@ -36,7 +38,8 @@ public class DataServiceImpl implements DataService {
 	private String dataRessourceName;
 
 	private PersonDao personDao;
-	private FireStationDao fireStationdao;
+	private FireStationDao fireStationDao;
+	private MedicalRecordDao medicalRecordDao;
 
 	Logger log = (Logger) LoggerFactory.getLogger(DataServiceImpl.class);
 
@@ -88,6 +91,7 @@ public class DataServiceImpl implements DataService {
 	@Override
 	public void loadData() {
 		try {
+			log.info("loadData : debut");
 			String data = StreamUtils.copyToString(new ClassPathResource(this.dataRessourceName).getInputStream(),
 					Charset.forName("UTF-8"));
 			JsonIterator jsoniterator = JsonIterator.parse(data);
@@ -98,18 +102,20 @@ public class DataServiceImpl implements DataService {
 			personAny.forEach(b -> loadPerson(b));
 			firestationAny.forEach(b -> loadFirestations(b));
 			medicalRecordAny.forEach(b -> loadMedicalRecords(b));
-			System.out.println("persons:" + persons.size());
-			System.out.println("firestations:" + firestations.size());
-			System.out.println("medicalrecords:" + medicalrecords.size());
 			Data inputData = new Data();
 			inputData.setPersons(persons);
 			inputData.setFireStations(firestations);
 			inputData.setMedicalRecords(medicalrecords);
 			personDao = new PersonDaoImpl();
 			personDao.setPersons(inputData.getPersons());
-			fireStationdao = new FireStationDaoImpl();
-			fireStationdao.setFireStations(inputData.getFireStation());
-			fireStationdao.setFireStations(firestations);
+			fireStationDao = new FireStationDaoImpl();
+			fireStationDao.setFireStations(inputData.getFireStation());
+			medicalRecordDao = new MedicalRecordDaoImpl();
+			medicalRecordDao.setMedicalRecords(inputData.getMedicalRecords());
+			//
+			String logchgt = "persons:" + persons.size() + " / firestations:" + firestations.size()
+					+ " / medicalrecords:" + medicalrecords.size();
+			log.info(logchgt);
 		} catch (IOException e) {
 			log.error("Error loading loadData", e);
 		}
