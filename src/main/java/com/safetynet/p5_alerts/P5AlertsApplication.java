@@ -8,7 +8,5 @@ public class P5AlertsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(P5AlertsApplication.class, args);
-		
 	}
-
 }

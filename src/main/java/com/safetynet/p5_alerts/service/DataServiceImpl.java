@@ -6,9 +6,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
@@ -16,9 +16,16 @@ import org.springframework.util.StreamUtils;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;
 import com.jsoniter.spi.TypeLiteral;
+import com.safetynet.p5_alerts.dao.FireStationDao;
+import com.safetynet.p5_alerts.dao.FireStationDaoImpl;
+import com.safetynet.p5_alerts.dao.PersonDao;
+import com.safetynet.p5_alerts.dao.PersonDaoImpl;
+import com.safetynet.p5_alerts.model.Data;
 import com.safetynet.p5_alerts.model.FireStation;
 import com.safetynet.p5_alerts.model.MedicalRecord;
 import com.safetynet.p5_alerts.model.Person;
+
+import ch.qos.logback.classic.Logger;
 
 @Service
 public class DataServiceImpl implements DataService {
@@ -27,6 +34,11 @@ public class DataServiceImpl implements DataService {
 	private static List<FireStation> firestations = new ArrayList<>();
 	private static List<MedicalRecord> medicalrecords = new ArrayList<>();
 	private String dataRessourceName;
+
+	private PersonDao personDao;
+	private FireStationDao fireStationdao;
+
+	Logger log = (Logger) LoggerFactory.getLogger(DataServiceImpl.class);
 
 	public DataServiceImpl(String dataRessourceName) {
 		this.dataRessourceName = dataRessourceName;
@@ -37,14 +49,11 @@ public class DataServiceImpl implements DataService {
 	}
 
 	private void loadPerson(Any any) {
-		Person p = new Person();
-		p.setFirstname(any.get("firstName").toString());
-		p.setLastname(any.get("lastName").toString());
-		p.setAddress(any.get("address").toString());
-		p.setCity(any.get("city").toString());
-		p.setZip(any.get("zip").toString());
-		p.setPhone(any.get("phone").toString());
-		p.setEmail(any.get("email").toString());
+		Person.Builder personlBuilder = new Person.Builder();
+		Person p = personlBuilder.setFirstname(any.get("firstName").toString())
+				.setLastname(any.get("lastName").toString()).setAddress(any.get("address").toString())
+				.setCity(any.get("city").toString()).setZip(any.get("zip").toString())
+				.setPhone(any.get("phone").toString()).setEmail(any.get("email").toString()).build();
 		persons.add(p);
 	}
 
@@ -72,10 +81,11 @@ public class DataServiceImpl implements DataService {
 			m.setAllergies(allergies);
 			medicalrecords.add(m);
 		} catch (ParseException e) {
-			// logger à gérer
+			log.error("Error loading loadMedicalRecords", e);
 		}
 	}
 
+	@Override
 	public void loadData() {
 		try {
 			String data = StreamUtils.copyToString(new ClassPathResource(this.dataRessourceName).getInputStream(),
@@ -91,45 +101,17 @@ public class DataServiceImpl implements DataService {
 			System.out.println("persons:" + persons.size());
 			System.out.println("firestations:" + firestations.size());
 			System.out.println("medicalrecords:" + medicalrecords.size());
+			Data inputData = new Data();
+			inputData.setPersons(persons);
+			inputData.setFireStations(firestations);
+			inputData.setMedicalRecords(medicalrecords);
+			personDao = new PersonDaoImpl();
+			personDao.setPersons(inputData.getPersons());
+			fireStationdao = new FireStationDaoImpl();
+			fireStationdao.setFireStations(inputData.getFireStation());
+			fireStationdao.setFireStations(firestations);
 		} catch (IOException e) {
-			// logger à gérer
-		}
-	}
-
-	public List<Person> getPersons() {
-		return persons;
-	}
-
-	public List<FireStation> getFirestations() {
-		return firestations;
-	}
-
-	public List<MedicalRecord> getMedicalrecords() {
-		return medicalrecords;
-	}
-
-	public void savePerson(Person person) {
-		persons.add(person);
-	}
-
-	public void updatePerson(Person person) {
-		int pos = 0;
-		for (Person p : persons) {
-			if (p.getFirstname().equals(person.getFirstname()) && p.getLastname().equals(person.getLastname())) {
-				persons.set(pos, person);
-			}
-			pos++;
-		}
-		
-	}
-	
-	public void deletePerson(Person person) {
-		Iterator<Person> i = persons.iterator();
-		while (i.hasNext()) {
-		   Person o = i.next();
-		   if (o.getFirstname().equals(person.getFirstname()) && o.getLastname().equals(person.getLastname())) {
-				i.remove();
-			}
+			log.error("Error loading loadData", e);
 		}
 	}
 

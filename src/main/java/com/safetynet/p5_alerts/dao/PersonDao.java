@@ -4,20 +4,27 @@ import java.util.List;
 
 import com.safetynet.p5_alerts.model.Person;
 
+
 public interface PersonDao {
 	
-	// Liste des personnes
-	List<Person> getAll();
+	// Alimentation des données initiales
+	void setPersons(List<Person> persons);
 	
-	// Liste des emails des  personnes pour une ville
-	List<String> communityEmail(String city);
+	// Liste des personnes
+	public List<Person> getAll();
+	
+	 //Liste des emails des  personnes pour une ville
+	public List<String> getCommunityEmails(String city);
 	
 	// Ajouter une personne
-	boolean addPerson(Person person);
+	public boolean addPerson(Person person);
 	
 	// Mise  à jour personne
-	boolean updatePerson(Person person);
+	public boolean updatePerson(Person person);
 	
 	// suppression personne
-	boolean deletePerson(Person person);
+	public boolean deletePerson(Person person);
+	
+	// suppression de toutes les personnes
+	public boolean deleteAll();
 }

@@ -16,17 +16,11 @@ public interface DataService {
 	 * @throws IOException
 	 */
 	void loadData();
-
-	List<Person> getPersons();
-
-	List<FireStation> getFirestations();
-
-	List<MedicalRecord> getMedicalrecords();
-
-	void savePerson(Person person);
-	
-	void updatePerson(Person person);
-	
-	void deletePerson(Person person);
+	//List<Person> getPersons();
+	//List<FireStation> getFirestations();
+	//List<MedicalRecord> getMedicalrecords();
+	//void savePerson(Person person);
+	//void updatePerson(Person person);
+	//void deletePerson(Person person);
 
 }

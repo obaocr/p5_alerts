@@ -13,7 +13,7 @@ public class ApplicationStartupRunner implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		// chargement des données
 		System.out.println("MyCommandLineRunner...");
-		DataService ds = new DataServiceImpl("data_test.json");
+		DataService ds = new DataServiceImpl("data.json");
 		ds.loadData();
 	}
 }

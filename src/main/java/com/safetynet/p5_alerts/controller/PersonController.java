@@ -2,6 +2,7 @@ package com.safetynet.p5_alerts.controller;
 
 import java.util.List;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,42 +12,47 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.safetynet.p5_alerts.dao.PersonDao;
 import com.safetynet.p5_alerts.model.Person;
+import com.safetynet.p5_alerts.service.PersonService;
+
+import ch.qos.logback.classic.Logger;
 
 
 @RestController
 public class PersonController {
 	
-	@Autowired
-	private  PersonDao personDao;
+	Logger log = (Logger) LoggerFactory.getLogger(PersonController.class);
 	
-	@GetMapping(value="communityEmail")
-	public List<String> communityEmail(@RequestParam String city) {
-		return personDao.communityEmail(city);
+	@Autowired
+	private  PersonService personService;
+	
+	@GetMapping(value="persons/all")
+	public List<Person> all() {
+		log.info("persons/all : list of persons");
+		return personService.getPersons();
 	}
 	
-	@GetMapping(value="persons/findAll")
-	public List<Person> findAll() {
-		return personDao.getAll();
+	@GetMapping(value="communityEmail")
+	public List<String> getCommunityEmails(@RequestParam String city) {
+		log.info("communityEmail : list persons emails for a city");
+		return personService.getCommunityEmails(city);
 	}
 	
 	@PostMapping(value="person")
 	public boolean addPerson(@RequestBody Person person) {
-		personDao.addPerson(person);
-		return true;
+		log.info("Create a person");
+		return personService.addPerson(person);
 	}
 	
 	@PutMapping(value="person")
 	public boolean updatePerson(@RequestBody Person person) {
-		personDao.updatePerson(person);
-		return true;
+		log.info("Update a person");
+		return personService.updatePerson(person);
 	}
 	
 	@DeleteMapping(value="person")
 	public boolean deletePerson(@RequestBody Person person) {
-		personDao.deletePerson(person);
-		return true;
+		log.info("Detete a person");
+		return personService.deletePerson(person);
 	}
-
 }
