@@ -33,6 +33,27 @@ class MedicalRecordDaoTest {
 	}
 	
 	@Test
+	void searchByNameTest() throws ParseException {
+		MedicalRecordDao medicalRecordDao = new MedicalRecordDaoImpl();
+		MedicalRecord medicalRecord = new MedicalRecord();
+		int nbItem = medicalRecordDao.getAll().size();
+		// Ajout d'un item
+		medicalRecord.setFirstname("Xavier-Emmanuel");
+		medicalRecord.setLastname("Dupont");
+		Date birthDate = new SimpleDateFormat("dd/MM/yyyy").parse("12/12/1947");
+		medicalRecord.setBirthDate(birthDate);
+		List<String> medications = new ArrayList<>();
+		medications.add("Aspirine");
+		medicalRecord.setMedications(medications);
+		List<String> allergies = new ArrayList<>();
+		medicalRecord.setAllergies(allergies);
+		allergies.add("milk");
+		medicalRecordDao.addMedicalRecord(medicalRecord);
+		assertTrue(medicalRecordDao.searchByName("Xavier-Emmanuel", "Dupont").getBirthDate().equals(birthDate));
+
+	}
+	
+	@Test
 	void addMedicalRecordTest() throws ParseException {
 		MedicalRecordDao medicalRecordDao = new MedicalRecordDaoImpl();
 		MedicalRecord medicalRecord = new MedicalRecord();

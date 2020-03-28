@@ -27,6 +27,20 @@ class PersonDaoTest {
 		int nbPersons = personDao.getAll().size();
 		assertTrue(nbPersons > 0);
 	}
+	
+	@Test
+	void searchByNameTest() {
+		PersonDao personDao = new PersonDaoImpl();
+		int nbPersons = personDao.getAll().size();
+		Person.Builder personlBuilder = new Person.Builder();
+		Person p = personlBuilder.setFirstname("Maria").setLastname("Martinez").setAddress("address").setCity("Versailles")
+				.setZip("zip").setPhone("phone").setEmail("email").build();
+		personDao.addPerson(p);
+		int nbPersons2 = personDao.getAll().size();
+		Person ps = personDao.searchByName("Martinez", "Maria");
+		assertTrue(nbPersons + 1  == nbPersons2);
+		assertTrue(ps.getCity().equals("Versailles") == true);
+	}
 
 	@Test
 	// Test de la recherche des emails des personnes d'une ville inexistante

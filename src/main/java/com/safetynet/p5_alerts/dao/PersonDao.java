@@ -13,6 +13,9 @@ public interface PersonDao {
 	// Liste des personnes
 	public List<Person> getAll();
 	
+	// Recherche par nom/prenom
+	public Person searchByName(String lastName, String firstName);
+	
 	 //Liste des emails des  personnes pour une ville
 	public List<String> getCommunityEmails(String city);
 	

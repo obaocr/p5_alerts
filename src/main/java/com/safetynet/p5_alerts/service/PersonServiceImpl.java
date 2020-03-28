@@ -19,11 +19,6 @@ public class PersonServiceImpl implements PersonService {
 		return personDao.getAll();
 	}
 
-	@Override
-	public List<String> getCommunityEmails(String city) {
-		return personDao.getCommunityEmails(city);
-	}
-
 	public boolean addPerson(Person person) {
 		return personDao.addPerson(person);
 	}

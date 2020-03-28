@@ -3,11 +3,13 @@ package com.safetynet.p5_alerts.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.safetynet.p5_alerts.dao.MedicalRecordDao;
 import com.safetynet.p5_alerts.model.MedicalRecord;
 
 
+@Service
 public class MedicalRecordServiceImpl implements MedicalRecordService {
 
 	@Autowired

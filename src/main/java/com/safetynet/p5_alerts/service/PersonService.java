@@ -13,8 +13,6 @@ public interface PersonService {
 	 */
 	public List<Person> getPersons();
 
-	public List<String> getCommunityEmails(String city);
-
 	public boolean addPerson(Person person);
 
 	public boolean updatePerson(Person person);

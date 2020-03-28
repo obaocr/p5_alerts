@@ -17,24 +17,37 @@ import ch.qos.logback.classic.Logger;
  */
 @Repository
 public class PersonDaoImpl implements PersonDao {
-	
+
 	private static List<Person> personData;
-	
+
 	Logger log = (Logger) LoggerFactory.getLogger(PersonDaoImpl.class);
-	
-	public PersonDaoImpl () {
-		
+
+	public PersonDaoImpl() {
+
 	}
-	
-	public void setPersons (List<Person> persons) {
+
+	public void setPersons(List<Person> persons) {
 		personData = persons;
 	}
-	
+
 	// Retourne toutes les personnes
 	@Override
 	public List<Person> getAll() {
 		log.info("getAll : list of persons");
 		return personData;
+	}
+
+	// Mise a jour personne
+	@Override
+	public Person searchByName(String firstName, String lastName) {
+		log.info("PersonDao searchByName");
+		for (Person person : personData) {
+			log.info("PersonDao searchByName boucle : " + firstName + "/" + lastName + "/" + person.getFirstname() + "/" + person.getLastname() );
+			if (person.getFirstname().equals(firstName) && person.getLastname().equals(lastName)) {
+				return person;
+			}
+		}
+		return null;
 	}
 
 	// Retourne une liste d'emails pour les personnes habitants dans une ville
@@ -51,7 +64,7 @@ public class PersonDaoImpl implements PersonDao {
 		}
 		return emails;
 	}
-	
+
 	// Ajout personne
 	@Override
 	public boolean addPerson(Person person) {
@@ -67,7 +80,8 @@ public class PersonDaoImpl implements PersonDao {
 		int pos = 0;
 		boolean isFound = false;
 		for (Person p : personData) {
-			if (p.getFirstname().equals(person.getFirstname()) && p.getLastname().equals(person.getLastname())) {
+			if (p.getFirstname().equals(person.getFirstname().toString())
+					&& p.getLastname().equals(person.getLastname().toString())) {
 				personData.set(pos, person);
 				isFound = true;
 			}
@@ -75,28 +89,32 @@ public class PersonDaoImpl implements PersonDao {
 		}
 		return isFound;
 	}
-	
+
 	// Suppression personne
-		@Override
-		public boolean deletePerson(Person person) {
-			boolean isFound = false;
-			log.info("dPersonDao eletePerson : delete a person");
-			Iterator<Person> i = personData.iterator();
-			while (i.hasNext()) {
-			   Person o = i.next();
-			   if (o.getFirstname().equals(person.getFirstname()) && o.getLastname().equals(person.getLastname())) {
-					i.remove();
-					isFound = true;
-				}
+	@Override
+	public boolean deletePerson(Person person) {
+		boolean isFound = false;
+		log.info("dPersonDao eletePerson : delete a person");
+		Iterator<Person> i = personData.iterator();
+		while (i.hasNext()) {
+			Person o = i.next();
+			if (o.getFirstname().equals(person.getFirstname().toString())
+					&& o.getLastname().equals(person.getLastname().toString())) {
+				i.remove();
+				isFound = true;
 			}
-			return isFound;
 		}
-		
-		// Suppression de toutes les personnes
-		@Override
-		public boolean deleteAll() {
-			log.info("PersonDao deleteAll : delete all person");
-			if(personData != null) {personData.clear();};
-			return true;
+		return isFound;
+	}
+
+	// Suppression de toutes les personnes
+	@Override
+	public boolean deleteAll() {
+		log.info("PersonDao deleteAll : delete all person");
+		if (personData != null) {
+			personData.clear();
 		}
+		;
+		return true;
+	}
 }

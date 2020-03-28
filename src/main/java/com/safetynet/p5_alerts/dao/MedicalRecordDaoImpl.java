@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.safetynet.p5_alerts.model.MedicalRecord;
+import com.safetynet.p5_alerts.model.Person;
 
 import ch.qos.logback.classic.Logger;
 
@@ -30,6 +31,19 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
 	public List<MedicalRecord> getAll() {
 		return medicalRecordData;
 	}
+	
+	// Recherche par prenom, nom
+	@Override
+	public MedicalRecord searchByName(String firstName, String lastName) {
+		log.info("MedicalRecordDao searchByName");
+		for (MedicalRecord medicalRecord : medicalRecordData) {
+			log.info("MedicalRecordDao searchByName boucle : " + firstName + "/" + lastName + "/" + medicalRecord.getFirstname() + "/" + medicalRecord.getLastname() );
+			if (medicalRecord.getFirstname().equals(firstName) && medicalRecord.getLastname().equals(lastName)) {
+				return medicalRecord;
+			}
+		}
+		return null;
+	}
 
 	@Override
 	public boolean addMedicalRecord(MedicalRecord medicalRecord) {
@@ -44,7 +58,7 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
 		int pos = 0;
 		boolean isFound = false;
 		for (MedicalRecord mr : medicalRecordData) {
-			if (mr.getFirstname().equals(medicalRecord.getFirstname()) && mr.getLastname().equals(medicalRecord.getLastname())) {
+			if (mr.getFirstname().equals(medicalRecord.getFirstname().toString()) && mr.getLastname().equals(medicalRecord.getLastname().toString())) {
 				medicalRecordData.set(pos, medicalRecord);
 				isFound = true;
 			}
@@ -60,7 +74,7 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
 		Iterator<MedicalRecord> i = medicalRecordData.iterator();
 		while (i.hasNext()) {
 			MedicalRecord o = i.next();
-			if (o.getFirstname().equals(medicalRecord.getFirstname()) && o.getLastname().equals(medicalRecord.getLastname())) {
+			if (o.getFirstname().equals(medicalRecord.getFirstname().toString()) && o.getLastname().equals(medicalRecord.getLastname().toString())) {
 				i.remove();
 				isFound = true;
 			}

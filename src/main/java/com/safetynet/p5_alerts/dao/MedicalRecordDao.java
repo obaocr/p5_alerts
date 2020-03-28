@@ -10,6 +10,9 @@ public interface MedicalRecordDao {
 
 	// Liste des MedicalRecord
 	public List<MedicalRecord> getAll();
+	
+	// Recherche par prenom, nom
+	public MedicalRecord searchByName(String firstName, String lastName);
 
 	// Ajouter une MedicalRecord
 	public boolean addMedicalRecord(MedicalRecord medicalRecord);

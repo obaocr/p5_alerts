@@ -49,7 +49,7 @@ public class FireStationDaoImpl implements FireStationDao {
 		int pos = 0;
 		boolean isFound = false;
 		for (FireStation fs : fireStationData) {
-			if (fs.getAddress().equals(fireStation.getAddress())) {
+			if (fs.getAddress().equals(fireStation.getAddress().toString())) {
 				fireStationData.set(pos, fireStation);
 				isFound = true;
 			}
@@ -67,7 +67,7 @@ public class FireStationDaoImpl implements FireStationDao {
 		Iterator<FireStation> i = fireStationData.iterator();
 		while (i.hasNext()) {
 			FireStation o = i.next();
-			if (o.getStation().equals(fireStation.getStation())) {
+			if (o.getStation().equals(fireStation.getStation().toString())) {
 				i.remove();
 				isFound = true;
 			}
@@ -84,7 +84,7 @@ public class FireStationDaoImpl implements FireStationDao {
 		Iterator<FireStation> i = fireStationData.iterator();
 		while (i.hasNext()) {
 			FireStation o = i.next();
-			if (o.getAddress().equals(fireStation.getAddress())) {
+			if (o.getAddress().equals(fireStation.getAddress().toString())) {
 				i.remove();
 				isFound = true;
 			}

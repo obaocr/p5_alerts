@@ -26,16 +26,10 @@ public class PersonController {
 	@Autowired
 	private  PersonService personService;
 	
-	@GetMapping(value="persons/all")
+	@GetMapping(value="person/all")
 	public List<Person> all() {
 		log.info("persons/all : list of persons");
 		return personService.getPersons();
-	}
-	
-	@GetMapping(value="communityEmail")
-	public List<String> getCommunityEmails(@RequestParam String city) {
-		log.info("communityEmail : list persons emails for a city");
-		return personService.getCommunityEmails(city);
 	}
 	
 	@PostMapping(value="person")
