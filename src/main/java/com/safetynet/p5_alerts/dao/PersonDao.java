@@ -2,6 +2,7 @@ package com.safetynet.p5_alerts.dao;
 
 import java.util.List;
 
+import com.safetynet.p5_alerts.model.CommunityEmail;
 import com.safetynet.p5_alerts.model.Person;
 
 
@@ -16,8 +17,11 @@ public interface PersonDao {
 	// Recherche par nom/prenom
 	public Person searchByName(String lastName, String firstName);
 	
+	// Recherche par nom/prenom
+	public List<Person> searchByAddress(String address);
+	
 	 //Liste des emails des  personnes pour une ville
-	public List<String> getCommunityEmails(String city);
+	public CommunityEmail getCommunityEmails(String city);
 	
 	// Ajouter une personne
 	public boolean addPerson(Person person);

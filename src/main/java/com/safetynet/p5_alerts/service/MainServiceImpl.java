@@ -1,7 +1,10 @@
 package com.safetynet.p5_alerts.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +15,15 @@ import com.safetynet.p5_alerts.dao.FireStationDao;
 import com.safetynet.p5_alerts.dao.MedicalRecordDao;
 import com.safetynet.p5_alerts.dao.PersonDao;
 import com.safetynet.p5_alerts.model.ChildAlert;
+import com.safetynet.p5_alerts.model.CommunityEmail;
 import com.safetynet.p5_alerts.model.FireStation;
 import com.safetynet.p5_alerts.model.FirestationPerson;
 import com.safetynet.p5_alerts.model.MedicalRecord;
 import com.safetynet.p5_alerts.model.Person;
 import com.safetynet.p5_alerts.model.PersonForFirestation;
+import com.safetynet.p5_alerts.model.PersonForFirestationAddress;
 import com.safetynet.p5_alerts.model.PersonInfo;
+import com.safetynet.p5_alerts.model.PhoneAlert;
 import com.safetynet.p5_alerts.util.Utils;
 
 import ch.qos.logback.classic.Logger;
@@ -37,7 +43,7 @@ public class MainServiceImpl implements MainService {
 	private PersonDao personDao;
 
 	@Override
-	public List<String> getCommunityEmails(String city) {
+	public CommunityEmail getCommunityEmails(String city) {
 		return personDao.getCommunityEmails(city);
 	}
 
@@ -107,7 +113,6 @@ public class MainServiceImpl implements MainService {
 
 	@Override
 	public FirestationPerson firestation(String station) {
-
 		log.info("PersonForFiretationResult : infos persons for a station");
 		List<Person> persons = personDao.getAll();
 		List<FireStation> firestations = fireStationDao.getAll();
@@ -153,6 +158,61 @@ public class MainServiceImpl implements MainService {
 		}
 		// gérer code retour not found ...
 		return isStationFound == true ? firestationPerson : null;
+	}
+	
+	// Les telephones des personnes desservies par adresse de la station
+	// On dedoublonne
+	@Override
+	public PhoneAlert phoneAlert(String firestation_number) {
+		log.info("phoneAlert : Phone for an address firestation");
+		PhoneAlert phoneAlert = new PhoneAlert();
+		Set<String> setPhone = new HashSet<>();
+		List<String> phones = new ArrayList<>();
+		List<Person> persons;
+		for(FireStation fireStation : fireStationDao.getAll()) {
+			if(fireStation.getStation().equals(firestation_number)) {
+				persons = personDao.searchByAddress(fireStation.getAddress());
+				for (Person psn : persons) {
+					setPhone.add(psn.getPhone());
+				}
+			}
+		}
+		if (setPhone.size() > 0) {
+			phones = setPhone.stream().collect(Collectors.toList());
+			phoneAlert.setPhones(phones);
+		}
+		return phoneAlert;
+	}
+	
+	@Override
+	// Les personnes a une adresse avec info Firestatione et Medicalrecords
+	public List<PersonForFirestationAddress> fire(String address) {
+		log.info("fire : Persons infos for a firestation address");
+		List<PersonForFirestationAddress> lpersonForFirestationAddress = new ArrayList<>();
+		FireStation fireStation;
+		MedicalRecord medicalRecord;
+		PersonForFirestationAddress personForFirestationAddress;
+		int age;
+		for (Person psn : personDao.searchByAddress(address)) {
+			personForFirestationAddress = new PersonForFirestationAddress();
+			personForFirestationAddress.setFirstname(psn.getFirstname());
+			personForFirestationAddress.setLastname(psn.getLastname());
+			personForFirestationAddress.setAddress(psn.getAddress());
+			fireStation = fireStationDao.searchByAddress(psn.getAddress());
+			if (fireStation != null) {
+				personForFirestationAddress.setStation(fireStation.getStation());
+			}
+			medicalRecord = medicalRecordDao.searchByName(psn.getFirstname(), psn.getLastname());
+			if(medicalRecord != null) {
+				age = Utils.calculateAgeFromBirthDate(medicalRecord.getBirthDate());
+				personForFirestationAddress.setAge(age);
+				personForFirestationAddress.setMedications(medicalRecord.getMedications());
+				personForFirestationAddress.setAllergies(medicalRecord.getAllergies());
+			}
+			lpersonForFirestationAddress.add(personForFirestationAddress);
+			
+		}
+		return lpersonForFirestationAddress;
 	}
 
 }

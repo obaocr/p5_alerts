@@ -19,8 +19,13 @@ public interface FireStationDao {
 
 	// suppression FireStation
 	public boolean deleteFireStationStation(FireStation fireStation);
+
 	public boolean deleteFireStationAddress(FireStation fireStation);
 
 	// suppression de toutes les FireStation
 	public boolean deleteAll();
+
+	// recherche par adresse, rend 1 station, la première si doublon
+	public FireStation searchByAddress(String address);
+
 }

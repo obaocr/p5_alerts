@@ -22,15 +22,15 @@ class PersonServiceTest {
 		System.out.println("Test PersonService 1 taille liste personne : " + personDao.getAll().size());
 	}
 	
-	
+	/*
 	@Test
 	void
 	getAllTest() {
 		PersonService personService = new PersonServiceImpl();
 		List<Person> persons = personService.getPersons();
-		int nbPersons = personService.getPersons().size();
-		assertTrue(nbPersons > 0);
-	}
+		//int nbPersons = personService.getPersons().size();
+		//assertTrue(nbPersons > 0);
+	}*/
 
 	/*
 	@Test

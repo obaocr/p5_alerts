@@ -101,5 +101,16 @@ class FireStationDaoTest {
 		assertTrue(nbItem2 == nbItem1 + 1);
 		assertTrue(nbItem1 == fireStationDao.getAll().size());
 	}
+	
+	@Test
+	void searchByAddressTest() {
+		FireStation fireStation = new FireStation();
+		fireStation.setAddress("125 rue des tulipiers");
+		fireStation.setStation("127585");
+		FireStationDao fireStationDao = new FireStationDaoImpl();
+		fireStationDao.addFireStation(fireStation);
+		assertTrue(fireStationDao.searchByAddress("125 rue des tulipiers").getStation().toString() == "127585");
+
+	}
 
 }

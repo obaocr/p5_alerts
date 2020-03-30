@@ -7,6 +7,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import com.safetynet.p5_alerts.model.CommunityEmail;
 import com.safetynet.p5_alerts.model.Person;
 import com.safetynet.p5_alerts.service.DataService;
 import com.safetynet.p5_alerts.service.DataServiceImpl;
@@ -37,17 +38,32 @@ class PersonDaoTest {
 				.setZip("zip").setPhone("phone").setEmail("email").build();
 		personDao.addPerson(p);
 		int nbPersons2 = personDao.getAll().size();
-		Person ps = personDao.searchByName("Martinez", "Maria");
+		Person ps = personDao.searchByName("Maria","Martinez");
 		assertTrue(nbPersons + 1  == nbPersons2);
 		assertTrue(ps.getCity().equals("Versailles") == true);
+	}
+	
+	@Test
+	void searchByAddressTest() {
+		PersonDao personDao = new PersonDaoImpl();
+		int nbPersons = personDao.getAll().size();
+		Person.Builder personlBuilder = new Person.Builder();
+		Person p = personlBuilder.setFirstname("Alex").setLastname("Martinez").setAddress("15 rue des olivier").setCity("Montelimar")
+				.setZip("zip").setPhone("phone").setEmail("email").build();
+		personDao.addPerson(p);
+		int nbPersons2 = personDao.getAll().size();
+		List<Person> persons = personDao.searchByAddress("15 rue des olivier");
+		assertTrue(nbPersons + 1  == nbPersons2);
+		assertTrue(persons.size() > 0);
 	}
 
 	@Test
 	// Test de la recherche des emails des personnes d'une ville inexistante
 	void communityEmailEmptyTest() {
 		PersonDao personDao = new PersonDaoImpl();
-		List<String> emails = personDao.getCommunityEmails("Culver");
-		assertTrue(emails.size() > 0);
+		CommunityEmail communityEmail;
+		communityEmail = personDao.getCommunityEmails("Culver");
+		assertTrue(communityEmail.getEmails().size() > 0);
 	}
 
 	@Test

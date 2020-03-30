@@ -101,4 +101,18 @@ public class FireStationDaoImpl implements FireStationDao {
 		}
 		return true;
 	}
+	
+	// recherche par adresse, rend 1 station, la première si doublon
+	@Override
+	public FireStation searchByAddress(String address) {
+		FireStation fireStation = null;
+		boolean isFound = false;
+		for (FireStation fs : fireStationData) {
+			if (fs.getAddress().equals(address)) {
+				fireStation = fs;
+				isFound = true;
+			}
+		}
+		return isFound == true ? fireStation : null;
+	}
 }
