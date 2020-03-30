@@ -37,7 +37,6 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
 	public MedicalRecord searchByName(String firstName, String lastName) {
 		log.info("MedicalRecordDao searchByName");
 		for (MedicalRecord medicalRecord : medicalRecordData) {
-			log.info("MedicalRecordDao searchByName boucle : " + firstName + "/" + lastName + "/" + medicalRecord.getFirstname() + "/" + medicalRecord.getLastname() );
 			if (medicalRecord.getFirstname().equals(firstName) && medicalRecord.getLastname().equals(lastName)) {
 				return medicalRecord;
 			}

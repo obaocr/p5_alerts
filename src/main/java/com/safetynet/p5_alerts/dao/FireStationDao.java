@@ -27,5 +27,8 @@ public interface FireStationDao {
 
 	// recherche par adresse, rend 1 station, la première si doublon
 	public FireStation searchByAddress(String address);
+	
+	// recherche des adresses d'une station
+	public List<String> searchByStation(String station);
 
 }

@@ -12,9 +12,11 @@ import com.safetynet.p5_alerts.dao.PersonDao;
 import com.safetynet.p5_alerts.model.ChildAlert;
 import com.safetynet.p5_alerts.model.CommunityEmail;
 import com.safetynet.p5_alerts.model.FirestationPerson;
+import com.safetynet.p5_alerts.model.Household;
 import com.safetynet.p5_alerts.model.PersonForFirestationAddress;
 import com.safetynet.p5_alerts.model.PersonInfo;
 import com.safetynet.p5_alerts.model.PhoneAlert;
+import com.safetynet.p5_alerts.service.FloodStationService;
 import com.safetynet.p5_alerts.service.MainService;
 
 import ch.qos.logback.classic.Logger;
@@ -26,6 +28,9 @@ public class MainController {
 	@Autowired
 	private MainService mainService;
 
+	@Autowired
+	private FloodStationService floodStationService;
+	
 	@Autowired
 	private PersonDao personDao;
 
@@ -63,6 +68,12 @@ public class MainController {
 	public List<PersonForFirestationAddress> fire(@RequestParam String address) {
 		log.info("fire : Persons infos for a firestation address");
 		return mainService.fire(address);
+	}
+	
+	@GetMapping(value = "flood/stations")
+	public List<Household> floodStations(@RequestParam List<String> stations) {
+		log.info("floodStations : households for stations addresses");
+		return floodStationService.floodStations(stations);
 	}
 
 }

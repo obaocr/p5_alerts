@@ -112,5 +112,29 @@ class FireStationDaoTest {
 		assertTrue(fireStationDao.searchByAddress("125 rue des tulipiers").getStation().toString() == "127585");
 
 	}
+	
+	@Test
+	void searchByStationTest() {
+		FireStationDao fireStationDao = new FireStationDaoImpl();
+		FireStation fireStation;
+		fireStation = new FireStation();
+		fireStation.setAddress("address1");
+		fireStation.setStation("625");
+		fireStationDao.addFireStation(fireStation);
+		fireStation = new FireStation();
+		fireStationDao.addFireStation(fireStation);
+		fireStation.setAddress("address1");
+		fireStation.setStation("625");
+		fireStationDao.addFireStation(fireStation);
+		fireStation = new FireStation();
+		fireStationDao.addFireStation(fireStation);
+		fireStation.setAddress("address2");
+		fireStation.setStation("625");
+		fireStationDao.addFireStation(fireStation);
+		List<String> laddress = fireStationDao.searchByStation("625");
+		// 2 addresses car de doublonnées
+		assertTrue(laddress.size() == 2);
+
+	}
 
 }

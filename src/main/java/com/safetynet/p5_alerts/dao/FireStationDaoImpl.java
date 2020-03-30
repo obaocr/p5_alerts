@@ -1,7 +1,11 @@
 package com.safetynet.p5_alerts.dao;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -114,5 +118,21 @@ public class FireStationDaoImpl implements FireStationDao {
 			}
 		}
 		return isFound == true ? fireStation : null;
+	}
+	
+	// Recherche des adresses d'une station, on dedoublonne
+	@Override
+	public List<String> searchByStation(String station) {
+		List<String> stations = new ArrayList<>();
+		Set<String> setSt = new HashSet<>();
+		for (FireStation fs : fireStationData) {
+			if(fs.getStation().equals(station)) {
+				setSt.add(fs.getAddress());
+			}
+		}
+		if(setSt.size() >0) {
+			stations = setSt.stream().collect(Collectors.toList());
+		}
+		return stations;
 	}
 }
