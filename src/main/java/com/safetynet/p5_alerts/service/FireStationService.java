@@ -8,6 +8,6 @@ public interface FireStationService {
 	public List<FireStation> getFireStations();
 	public boolean addFireStation(FireStation fireStation);
 	public boolean updateFireStation(FireStation fireStation);
-	public boolean deleteFireStationbyStation(FireStation fireStation);
-	public boolean deleteFireStationbyAddress(FireStation fireStation);
+	public List<FireStation> deleteFireStationbyStation(FireStation fireStation);
+	public List<FireStation> deleteFireStationbyAddress(FireStation fireStation);
 }

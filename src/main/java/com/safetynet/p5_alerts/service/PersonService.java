@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.safetynet.p5_alerts.model.Person;
+import com.safetynet.p5_alerts.model.PersonForAPIDelete;
 
 public interface PersonService {
 
@@ -17,5 +18,5 @@ public interface PersonService {
 
 	public boolean updatePerson(Person person);
 
-	public boolean deletePerson(Person person);
+	public boolean deletePerson(PersonForAPIDelete person);
 }

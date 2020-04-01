@@ -15,6 +15,7 @@ import com.safetynet.p5_alerts.dao.FireStationDao;
 import com.safetynet.p5_alerts.dao.MedicalRecordDao;
 import com.safetynet.p5_alerts.dao.PersonDao;
 import com.safetynet.p5_alerts.model.ChildAlert;
+import com.safetynet.p5_alerts.model.ChildAlertResponse;
 import com.safetynet.p5_alerts.model.CommunityEmail;
 import com.safetynet.p5_alerts.model.FireStation;
 import com.safetynet.p5_alerts.model.FirestationPerson;
@@ -22,8 +23,11 @@ import com.safetynet.p5_alerts.model.MedicalRecord;
 import com.safetynet.p5_alerts.model.Person;
 import com.safetynet.p5_alerts.model.PersonForFirestation;
 import com.safetynet.p5_alerts.model.PersonForFirestationAddress;
+import com.safetynet.p5_alerts.model.PersonForFirestationAddressResponse;
 import com.safetynet.p5_alerts.model.PersonInfo;
+import com.safetynet.p5_alerts.model.PersonInfoResponse;
 import com.safetynet.p5_alerts.model.PhoneAlert;
+import com.safetynet.p5_alerts.util.EntityNotFoundException;
 import com.safetynet.p5_alerts.util.Utils;
 
 import ch.qos.logback.classic.Logger;
@@ -44,12 +48,17 @@ public class MainServiceImpl implements MainService {
 
 	@Override
 	public CommunityEmail getCommunityEmails(String city) {
-		return personDao.getCommunityEmails(city);
+		if (personDao.getCommunityEmails(city).getEmails().isEmpty()) {
+			throw new EntityNotFoundException("No emails found for the city:" + city);
+		} else {
+			return personDao.getCommunityEmails(city);
+		}
 	}
 
 	@Override
-	public List<PersonInfo> personInfo(String lastName, String firstName) {
-		log.info("personInfo : infos persons for a 'name'");
+	public PersonInfoResponse personInfo(String lastName, String firstName) {
+		log.debug("MainServiceImpl : infos persons for a 'name'");
+		PersonInfoResponse PersonInfoResponse = new PersonInfoResponse();
 		List<Person> persons = personDao.getAll();
 		List<MedicalRecord> medicalRecords = medicalRecordDao.getAll();
 		List<PersonInfo> personInfos = new ArrayList<>();
@@ -72,13 +81,15 @@ public class MainServiceImpl implements MainService {
 				}
 			}
 		}
-		return personInfos;
+		PersonInfoResponse.setPersonInfos(personInfos);
+		return PersonInfoResponse;
 	}
 
 	@Override
-	public List<ChildAlert> childAlert(@RequestParam String address) {
-		log.info("childAlert : list of children from an address");
+	public ChildAlertResponse childAlert(@RequestParam String address) {
+		log.debug(" MainServiceImpl childAlert : list of children from an address");
 		// Recherche des enfants
+		ChildAlertResponse childAlertResponse = new ChildAlertResponse();
 		List<ChildAlert> childAlerts = new ArrayList<>();
 		List<Person> membres;
 		ChildAlert childAlert;
@@ -108,12 +119,13 @@ public class MainServiceImpl implements MainService {
 			}
 		}
 		System.out.println("liste 1 childAlerts size : " + childAlerts.size());
-		return childAlerts;
+		childAlertResponse.setChildAlerts(childAlerts);
+		return childAlertResponse;
 	}
 
 	@Override
 	public FirestationPerson firestation(String station) {
-		log.info("PersonForFiretationResult : infos persons for a station");
+		log.debug("MainServiceImpl PersonForFiretationResult : infos persons for a station");
 		List<Person> persons = personDao.getAll();
 		List<FireStation> firestations = fireStationDao.getAll();
 		FirestationPerson firestationPerson = new FirestationPerson();
@@ -164,7 +176,7 @@ public class MainServiceImpl implements MainService {
 	// On dedoublonne
 	@Override
 	public PhoneAlert phoneAlert(String firestation_number) {
-		log.info("phoneAlert : Phone for an address firestation");
+		log.debug("MainServiceImpl phoneAlert : Phone for an address firestation");
 		PhoneAlert phoneAlert = new PhoneAlert();
 		Set<String> setPhone = new HashSet<>();
 		List<String> phones = new ArrayList<>();
@@ -186,8 +198,9 @@ public class MainServiceImpl implements MainService {
 
 	@Override
 	// Les personnes a une adresse avec info Firestatione et Medicalrecords
-	public List<PersonForFirestationAddress> fire(String address) {
-		log.info("fire : Persons infos for a firestation address");
+	public PersonForFirestationAddressResponse fire(String address) {
+		log.debug("MainServiceImpl fire : Persons infos for a firestation address");
+		PersonForFirestationAddressResponse personForFirestationAddressResponse = new PersonForFirestationAddressResponse();
 		List<PersonForFirestationAddress> lpersonForFirestationAddress = new ArrayList<>();
 		FireStation fireStation;
 		MedicalRecord medicalRecord;
@@ -212,7 +225,8 @@ public class MainServiceImpl implements MainService {
 			lpersonForFirestationAddress.add(personForFirestationAddress);
 
 		}
-		return lpersonForFirestationAddress;
+		personForFirestationAddressResponse.setPersonForFirestationAddress(lpersonForFirestationAddress);
+		return personForFirestationAddressResponse;
 	}
 
 }

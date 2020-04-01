@@ -9,10 +9,9 @@ public class Person {
 	private String phone;
 	private String email;
 	
-	public Person() {
+	public Person () {
 		
-	}
-	
+	}	
 	public Person(String firstname, String lastname, String address, String city, String zip, String phone,
 			String email) {
 		super();

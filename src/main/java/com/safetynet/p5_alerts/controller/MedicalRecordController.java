@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.safetynet.p5_alerts.model.MedicalRecord;
+import com.safetynet.p5_alerts.model.PersonForAPIDelete;
 import com.safetynet.p5_alerts.service.MedicalRecordService;
 
 import ch.qos.logback.classic.Logger;
@@ -25,26 +26,29 @@ public class MedicalRecordController {
 
 	@GetMapping(value = "medicalrecord/all")
 	public List<MedicalRecord> all() {
-		log.info("medicalrecords/all : list of medicalrecords");
+		log.debug("medicalrecords/all : list of medicalrecords");
 		return medicalRecordService.getMedicalRecords();
 	}
 
 	@PostMapping(value = "medicalrecord")
 	public boolean addMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
-		log.info("Create a medicalrecord");
+		log.debug("Create a medicalrecord");
 		return medicalRecordService.addMedicalRecord(medicalRecord);
 	}
 
 	@PutMapping(value = "medicalrecord")
 	public boolean updateMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
-		log.info("Update a medicalrecord by address");
+		log.debug("Update a medicalrecord by address");
 		return medicalRecordService.updateMedicalRecord(medicalRecord);
 	}
 
 	@DeleteMapping(value = "medicalrecord")
-	public boolean deleteMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
-		log.info("Detete a medicalrecord");
-		return medicalRecordService.deleteMedicalRecord(medicalRecord);
+	public boolean deleteMedicalRecord(@RequestBody PersonForAPIDelete person) {
+		log.debug("Detete a medicalrecord");
+		if(person == null || person.getFirstname().isEmpty() || person.getLastname().isEmpty()) {
+			throw new IllegalArgumentException();
+		}
+		return medicalRecordService.deleteMedicalRecord(person);
 	}
 
 }

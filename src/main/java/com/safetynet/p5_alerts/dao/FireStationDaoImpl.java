@@ -27,21 +27,21 @@ public class FireStationDaoImpl implements FireStationDao {
 	// Alimentation des données initiales
 	@Override
 	public void setFireStations(List<FireStation> fireStations) {
-		log.info("FireStationDao deleteAll : delete all FireStation");
+		log.debug("FireStationDao deleteAll : delete all FireStation");
 		fireStationData = fireStations;
 	}
 
 	// Liste des FireStation
 	@Override
 	public List<FireStation> getAll() {
-		log.info("FireStationDao getAll");
+		log.debug("FireStationDao getAll");
 		return fireStationData;
 	}
 
 	// Ajouter une FireStation
 	@Override
 	public boolean addFireStation(FireStation fireStation) {
-		log.info("FireStationDao addFireStation");
+		log.debug("FireStationDao addFireStation");
 		fireStationData.add(fireStation);
 		return true;
 	}
@@ -49,7 +49,7 @@ public class FireStationDaoImpl implements FireStationDao {
 	// Mise à jour FireStation d'une adresse
 	@Override
 	public boolean updateFireStation(FireStation fireStation) {
-		log.info("FireStationDao updateFireStation");
+		log.debug("FireStationDao updateFireStation");
 		int pos = 0;
 		boolean isFound = false;
 		for (FireStation fs : fireStationData) {
@@ -64,44 +64,51 @@ public class FireStationDaoImpl implements FireStationDao {
 
 	// suppression FireStation d'une station / station
 	@Override
-	public boolean deleteFireStationStation(FireStation fireStation) {
-		log.info("FireStationDao deleteFireStationStation");
-		boolean isFound = false;
+	public List<FireStation> deleteFireStationStation(FireStation fireStation) {
+		log.debug("FireStationDao deleteFireStationStation");
+		List<FireStation> fireStationResponse = new ArrayList<FireStation>();
 		log.info("dPersonDao eletePerson : delete a person");
 		Iterator<FireStation> i = fireStationData.iterator();
 		while (i.hasNext()) {
 			FireStation o = i.next();
 			if (o.getStation().equals(fireStation.getStation().toString())) {
+				FireStation fs = new FireStation();
+				fs.setStation(o.getStation());
+				fs.setAddress(o.getAddress());
+				fireStationResponse.add(fs);
 				i.remove();
-				isFound = true;
 			}
 		}
-		return isFound;
+		return fireStationResponse;
 	}
 
 	// suppression FireStation d'une station / adresse
 	@Override
-	public boolean deleteFireStationAddress(FireStation fireStation) {
-		log.info("FireStationDao deleteFireStationAddress");
-		boolean isFound = false;
+	public List<FireStation> deleteFireStationAddress(FireStation fireStation) {
+		log.debug("FireStationDao deleteFireStationAddress");
+		List<FireStation> fireStationResponse = new ArrayList<FireStation>();
 		log.info("dPersonDao eletePerson : delete a person");
 		Iterator<FireStation> i = fireStationData.iterator();
 		while (i.hasNext()) {
 			FireStation o = i.next();
 			if (o.getAddress().equals(fireStation.getAddress().toString())) {
+				FireStation fs = new FireStation();
+				fs.setStation(o.getStation());
+				fs.setAddress(o.getAddress());
+				fireStationResponse.add(fs);
 				i.remove();
-				isFound = true;
 			}
 		}
-		return isFound;
+		return fireStationResponse;
 	}
 
 	// suppression de toutes les FireStation
 	@Override
 	public boolean deleteAll() {
-		log.info("deleteAll : delete all FireStation");
+		log.debug("deleteAll : delete all FireStation");
 		if (fireStationData != null) {
 			fireStationData.clear();
+			System.out.println("** FireStationDaoImpl / clear de fireStationData : " + fireStationData.size());
 		}
 		return true;
 	}
@@ -109,6 +116,7 @@ public class FireStationDaoImpl implements FireStationDao {
 	// recherche par adresse, rend 1 station, la première si doublon
 	@Override
 	public FireStation searchByAddress(String address) {
+		log.debug("searchByAddress");
 		FireStation fireStation = null;
 		boolean isFound = false;
 		for (FireStation fs : fireStationData) {
@@ -123,6 +131,7 @@ public class FireStationDaoImpl implements FireStationDao {
 	// Recherche des adresses d'une station, on dedoublonne
 	@Override
 	public List<String> searchByStation(String station) {
+		log.debug("searchByStation");
 		List<String> stations = new ArrayList<>();
 		Set<String> setSt = new HashSet<>();
 		for (FireStation fs : fireStationData) {

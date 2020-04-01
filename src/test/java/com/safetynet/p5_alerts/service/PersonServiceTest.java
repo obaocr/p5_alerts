@@ -6,46 +6,37 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
-import com.safetynet.p5_alerts.dao.PersonDao;
-import com.safetynet.p5_alerts.dao.PersonDaoImpl;
 import com.safetynet.p5_alerts.model.Person;
+import com.safetynet.p5_alerts.model.PersonForAPIDelete;
 
+@ContextConfiguration
+@SpringBootTest
 class PersonServiceTest {
 
+	@Autowired
+	private PersonService personService;
 
 	@BeforeAll
 	private static void initData() {
-		DataService ds = new DataServiceImpl("data_test.json");
-		ds.loadData();
-		PersonDao personDao = new PersonDaoImpl();
-		System.out.println("Test PersonService 1 taille liste personne : " + personDao.getAll().size());
+		// On ne fait rien, le command line runner est demarré apres le @BeforeAll et
+		// charge les donnnées
 	}
-	
-	/*
-	@Test
-	void
-	getAllTest() {
-		PersonService personService = new PersonServiceImpl();
-		List<Person> persons = personService.getPersons();
-		//int nbPersons = personService.getPersons().size();
-		//assertTrue(nbPersons > 0);
-	}*/
 
-	/*
 	@Test
-	// Test de la recherche des emails des personnes d'une ville inexistante
-	void communityEmailEmptyTest() {
-		PersonService personService = new PersonServiceImpl();
-		List<String> emails = personService.getCommunityEmails("Culver");
-		assertTrue(emails.size() > 0);
+	void getAllTest() {
+		List<Person> persons = personService.getPersons();
+		int nbPersons = persons.size();
+		assertTrue(nbPersons > 0);
 	}
 
 	@Test
 	// Test ajout de personne
 	void addPersonTest() {
 		Person.Builder personlBuilder = new Person.Builder();
-		PersonService personService = new PersonServiceImpl();
 		int nbPersons = personService.getPersons().size();
 		Person p = personlBuilder.setFirstname("Olivier").setLastname("Martin").setAddress("address").setCity("city")
 				.setZip("zip").setPhone("phone").setEmail("email").build();
@@ -60,7 +51,6 @@ class PersonServiceTest {
 		boolean isUpdated = false;
 		// on ajoute une personne
 		Person.Builder personlBuilder = new Person.Builder();
-		PersonService personService = new PersonServiceImpl();
 		Person p = personlBuilder.setFirstname("Olivier").setLastname("Martin").setAddress("address").setCity("city")
 				.setZip("zip").setPhone("phone").setEmail("email").build();
 		personService.addPerson(p);
@@ -82,17 +72,19 @@ class PersonServiceTest {
 	@Test
 	// Suppression de personne
 	void deletePersonTest() {
+		PersonForAPIDelete personForAPIDelete = new PersonForAPIDelete();
+		personForAPIDelete.setFirstname("Olivier");
+		personForAPIDelete.setLastname("PersonServiceTest.deletePersonTest");
 		Person.Builder personlBuilder = new Person.Builder();
-		PersonService personService = new PersonServiceImpl();
 		int nbPersons1 = personService.getPersons().size();
-		Person p = personlBuilder.setFirstname("Olivier").setLastname("Martin").setAddress("address").setCity("city")
-				.setZip("zip").setPhone("phone").setEmail("email").build();
+		Person p = personlBuilder.setFirstname("Olivier").setLastname("PersonServiceTest.deletePersonTest")
+				.setAddress("address").setCity("city").setZip("zip").setPhone("phone").setEmail("email").build();
 		personService.addPerson(p);
 		int nbPersons2 = personService.getPersons().size();
-		personService.deletePerson(p);
+		personService.deletePerson(personForAPIDelete);
 		assertTrue(nbPersons2 == nbPersons1 + 1);
-		assertTrue(nbPersons1 == personService.getPersons().size());
-	]
-	*/
+		int nbPersons3 = personService.getPersons().size();
+		assertTrue(nbPersons1 == nbPersons3);
+	}
 
 }

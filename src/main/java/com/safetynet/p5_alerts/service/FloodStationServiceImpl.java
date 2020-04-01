@@ -14,6 +14,7 @@ import com.safetynet.p5_alerts.dao.FireStationDao;
 import com.safetynet.p5_alerts.dao.MedicalRecordDao;
 import com.safetynet.p5_alerts.dao.PersonDao;
 import com.safetynet.p5_alerts.model.Household;
+import com.safetynet.p5_alerts.model.HouseholdResponse;
 import com.safetynet.p5_alerts.model.MedicalRecord;
 import com.safetynet.p5_alerts.model.Person;
 import com.safetynet.p5_alerts.model.PersonForFlood;
@@ -37,6 +38,7 @@ public class FloodStationServiceImpl implements FloodStationService {
 
 	// Chargement dans une Set des adresses des stations (dedoublonées)
 	private Set<String> getAdressStations(List<String> stations) {
+		log.debug("FloodStationServiceImpl getAdressStations");
 		Set<String> setAddress = new HashSet<>();
 		for (String station : stations) {
 			List<String> address = fireStationDao.searchByStation(station);
@@ -48,6 +50,7 @@ public class FloodStationServiceImpl implements FloodStationService {
 	}
 
 	private List<PersonForFlood> getpersonForFlood(List<Person> persons) {
+		log.debug("FloodStationServiceImpl getpersonForFlood");
 		List<PersonForFlood> personForFloods = new ArrayList<>();
 		PersonForFlood personForFlood;
 		MedicalRecord medicalRecord;
@@ -69,8 +72,9 @@ public class FloodStationServiceImpl implements FloodStationService {
 
 	// Les foyers et personnes pour une liste de stations
 	@Override
-	public List<Household> floodStations(List<String> stations) {
+	public HouseholdResponse floodStations(List<String> stations) {
 		log.info("floodStations : Households & Persons infos for a firestations list");
+		HouseholdResponse householdResponse = new HouseholdResponse();
 		List<Household> households = new ArrayList<>();
 		Household household;
 		String address;
@@ -91,7 +95,8 @@ public class FloodStationServiceImpl implements FloodStationService {
 				households.add(household);
 			}
 		}
-		return households;
+		householdResponse.setHouseholds(households);
+		return householdResponse;
 	}
 
 }

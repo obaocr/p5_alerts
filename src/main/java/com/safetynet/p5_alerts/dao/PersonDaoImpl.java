@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.safetynet.p5_alerts.model.CommunityEmail;
 import com.safetynet.p5_alerts.model.Person;
+import com.safetynet.p5_alerts.model.PersonForAPIDelete;
 
 import ch.qos.logback.classic.Logger;
 
@@ -37,14 +38,14 @@ public class PersonDaoImpl implements PersonDao {
 	// Retourne toutes les personnes
 	@Override
 	public List<Person> getAll() {
-		log.info("getAll : list of persons");
+		log.debug("getAll : list of persons");
 		return personData;
 	}
 
 	// Recherche par prenom, nom
 	@Override
 	public Person searchByName(String firstName, String lastName) {
-		log.info("PersonDao searchByName");
+		log.debug("PersonDao searchByName");
 		for (Person person : personData) {
 			if (person.getFirstname().equals(firstName) && person.getLastname().equals(lastName)) {
 				return person;
@@ -52,46 +53,43 @@ public class PersonDaoImpl implements PersonDao {
 		}
 		return null;
 	}
-	
+
 	// Recherche par adresse
-		@Override
-		public List<Person> searchByAddress(String address) {
-			log.info("PersonDao searchByAddress");
-			List<Person> persons = new ArrayList<>();
-			for (Person person : personData) {
-				if (person.getAddress().equals(address)) {
-					persons.add(person);
-				}
+	@Override
+	public List<Person> searchByAddress(String address) {
+		log.debug("PersonDao searchByAddress");
+		List<Person> persons = new ArrayList<>();
+		for (Person person : personData) {
+			if (person.getAddress().equals(address)) {
+				persons.add(person);
 			}
-			return persons;
 		}
+		return persons;
+	}
 
 	// Retourne une liste d'emails pour les personnes habitants dans une ville
-	// On dedoublonne	
+	// On dedoublonne
 	@Override
 	public CommunityEmail getCommunityEmails(String city) {
-		log.info(" PersonDao communityEmail : list persons emails for a city");
+		log.debug(" PersonDao communityEmail : list persons emails for a city");
 		CommunityEmail communityEmail = new CommunityEmail();
 		Set<String> setEmails = new HashSet<>();
 		List<String> emails = new ArrayList<>();
-		System.out.println("Dans PersonDaoImpl.communityEmaiTtes, persons.size : " + personData.size());
 		for (Person person : personData) {
 			// !!! mettre equals pour tester la valeur sinon KO !!!
 			if (person.getCity().equals(city)) {
 				setEmails.add(person.getEmail());
 			}
 		}
-		if(setEmails.size() > 0) {
-			emails = setEmails.stream().collect(Collectors.toList());
-			communityEmail.setEmails(emails);
-		}
+		emails = setEmails.stream().collect(Collectors.toList());
+		communityEmail.setEmails(emails);
 		return communityEmail;
 	}
 
 	// Ajout personne
 	@Override
 	public boolean addPerson(Person person) {
-		log.info("PersonDao addPerson : Add a person");
+		log.debug("PersonDao addPerson : Add a person");
 		personData.add(person);
 		return true;
 	}
@@ -99,7 +97,7 @@ public class PersonDaoImpl implements PersonDao {
 	// Mise a jour personne
 	@Override
 	public boolean updatePerson(Person person) {
-		log.info("PersonDao updatePerson : update a person");
+		log.debug("PersonDao updatePerson : update a person");
 		int pos = 0;
 		boolean isFound = false;
 		for (Person p : personData) {
@@ -115,9 +113,9 @@ public class PersonDaoImpl implements PersonDao {
 
 	// Suppression personne
 	@Override
-	public boolean deletePerson(Person person) {
+	public boolean deletePerson(PersonForAPIDelete person) {
 		boolean isFound = false;
-		log.info("dPersonDao eletePerson : delete a person");
+		log.debug("dPersonDao eletePerson : delete a person");
 		Iterator<Person> i = personData.iterator();
 		while (i.hasNext()) {
 			Person o = i.next();
@@ -133,7 +131,7 @@ public class PersonDaoImpl implements PersonDao {
 	// Suppression de toutes les personnes
 	@Override
 	public boolean deleteAll() {
-		log.info("PersonDao deleteAll : delete all person");
+		log.debug("PersonDao deleteAll : delete all person");
 		if (personData != null) {
 			personData.clear();
 		}

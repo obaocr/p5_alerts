@@ -1,8 +1,7 @@
-package com.safetynet.p5_alerts.dao;
+package com.safetynet.p5_alerts.service;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,62 +9,37 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
 import com.safetynet.p5_alerts.model.MedicalRecord;
 import com.safetynet.p5_alerts.model.PersonForAPIDelete;
-import com.safetynet.p5_alerts.service.DataService;
-import com.safetynet.p5_alerts.service.DataServiceImpl;
 
+@ContextConfiguration
 @SpringBootTest
-class MedicalRecordDaoTest {
+class MedicalRecordServiceTest {
 
 	@Autowired
-	private DataService dataService;
+	private MedicalRecordService medicalRecordService;
 
-	@Autowired
-	private MedicalRecordDao medicalRecordDao;
-	
-	@BeforeEach
-	private void initData() throws IOException {
-		// Before Each car le Before All est exécuté avant le conetxte spring et donc avant le commandLineRunner
-		medicalRecordDao.deleteAll();
-		dataService.loadData();
+	@BeforeAll
+	private static void initData() {
+		// On ne fait rien, le command line runner est demarré apres le @BeforeAll et
+		// charge les donnnées
 	}
-	
+
 	@Test
 	void getAllTest() {
-		int nbItem = medicalRecordDao.getAll().size();
+		int nbItem = medicalRecordService.getMedicalRecords().size();
 		assertTrue(nbItem > 1);
 	}
-	
-	@Test
-	void searchByNameTest() throws ParseException {
-		MedicalRecord medicalRecord = new MedicalRecord();
-		int nbItem = medicalRecordDao.getAll().size();
-		// Ajout d'un item
-		medicalRecord.setFirstname("Xavier-Emmanuel");
-		medicalRecord.setLastname("Dupont");
-		Date birthDate = new SimpleDateFormat("dd/MM/yyyy").parse("12/12/1947");
-		medicalRecord.setBirthDate(birthDate);
-		List<String> medications = new ArrayList<>();
-		medications.add("Aspirine");
-		medicalRecord.setMedications(medications);
-		List<String> allergies = new ArrayList<>();
-		medicalRecord.setAllergies(allergies);
-		allergies.add("milk");
-		medicalRecordDao.addMedicalRecord(medicalRecord);
-		assertTrue(medicalRecordDao.searchByName("Xavier-Emmanuel", "Dupont").getBirthDate().equals(birthDate));
 
-	}
-	
 	@Test
 	void addMedicalRecordTest() throws ParseException {
 		MedicalRecord medicalRecord = new MedicalRecord();
-		int nbItem = medicalRecordDao.getAll().size();
+		int nbItem = medicalRecordService.getMedicalRecords().size();
 		// Ajout d'un item
 		medicalRecord.setFirstname("Olivier");
 		medicalRecord.setLastname("Dupont");
@@ -77,19 +51,19 @@ class MedicalRecordDaoTest {
 		List<String> allergies = new ArrayList<>();
 		medicalRecord.setAllergies(allergies);
 		allergies.add("milk");
-		medicalRecordDao.addMedicalRecord(medicalRecord);
+		medicalRecordService.addMedicalRecord(medicalRecord);
 		//
-		assertTrue(nbItem + 1 == medicalRecordDao.getAll().size());
+		assertTrue(nbItem + 1 == medicalRecordService.getMedicalRecords().size());
 
 	}
-	
+
 	@Test
 	void deleteMedicalRecordTest() throws ParseException {
+		MedicalRecord medicalRecord = new MedicalRecord();
 		PersonForAPIDelete personForAPIDelete = new PersonForAPIDelete();
 		personForAPIDelete.setFirstname("Olivier");
 		personForAPIDelete.setLastname("Hirch");
-		MedicalRecord medicalRecord = new MedicalRecord();
-		int nbItem1 = medicalRecordDao.getAll().size();
+		int nbItem1 = medicalRecordService.getMedicalRecords().size();
 		// Ajout d'un item
 		medicalRecord.setFirstname("Olivier");
 		medicalRecord.setLastname("Hirch");
@@ -101,14 +75,14 @@ class MedicalRecordDaoTest {
 		List<String> allergies = new ArrayList<>();
 		medicalRecord.setAllergies(allergies);
 		allergies.add("milk");
-		medicalRecordDao.addMedicalRecord(medicalRecord);
-		int nbItem2 = medicalRecordDao.getAll().size();
+		medicalRecordService.addMedicalRecord(medicalRecord);
+		int nbItem2 = medicalRecordService.getMedicalRecords().size();
 		// Suppression
-		medicalRecordDao.deleteMedicalRecord(personForAPIDelete);
+		medicalRecordService.deleteMedicalRecord(personForAPIDelete);
 		assertTrue(nbItem1 + 1 == nbItem2);
-		assertTrue(nbItem1 == medicalRecordDao.getAll().size());
+		assertTrue(nbItem1 == medicalRecordService.getMedicalRecords().size());
 	}
-	
+
 	@Test
 	void updateMedicalRecordTest() throws ParseException {
 		MedicalRecord medicalRecord = new MedicalRecord();
@@ -126,15 +100,15 @@ class MedicalRecordDaoTest {
 		medicalRecord.setAllergies(allergies);
 		allergies.add("Milk");
 		allergies.add("Wine");
-		medicalRecordDao.addMedicalRecord(medicalRecord);
+		medicalRecordService.addMedicalRecord(medicalRecord);
 		// Modification
 		medicalRecord.setAllergies(null);
-		medicalRecordDao.updateMedicalRecord(medicalRecord);
+		medicalRecordService.updateMedicalRecord(medicalRecord);
 		// Recherche
-		List<MedicalRecord> medicalRecords = medicalRecordDao.getAll();
+		List<MedicalRecord> medicalRecords = medicalRecordService.getMedicalRecords();
 		for (MedicalRecord mr : medicalRecords) {
-			if(mr.getFirstname().equals(medicalRecord.getFirstname()) && mr.getLastname().equals(medicalRecord.getLastname())
-					&& mr.getAllergies() == null)
+			if (mr.getFirstname().equals(medicalRecord.getFirstname())
+					&& mr.getLastname().equals(medicalRecord.getLastname()) && mr.getAllergies() == null)
 				isUpdated = true;
 		}
 		assertTrue(isUpdated == true);

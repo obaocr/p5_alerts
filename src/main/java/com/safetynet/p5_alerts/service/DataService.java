@@ -15,5 +15,5 @@ public interface DataService {
 	 * 
 	 * @throws IOException
 	 */
-	void loadData();
+	void loadData() throws IOException;
 }

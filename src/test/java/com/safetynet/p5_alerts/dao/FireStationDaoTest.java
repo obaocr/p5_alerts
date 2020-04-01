@@ -2,28 +2,37 @@ package com.safetynet.p5_alerts.dao;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.safetynet.p5_alerts.model.FireStation;
 import com.safetynet.p5_alerts.service.DataService;
 import com.safetynet.p5_alerts.service.DataServiceImpl;
 
+@SpringBootTest
 class FireStationDaoTest {
 
-	@BeforeAll
-	private static void initData() {
-		FireStationDao fireStationDao = new FireStationDaoImpl();
+	@Autowired
+	private DataService dataService;
+
+	@Autowired
+	FireStationDao fireStationDao;
+	
+	@BeforeEach
+	private void initData() throws IOException {
+		// Before Each car le Before All est exécuté avant le conetxte spring et donc avant le commandLineRunner
 		fireStationDao.deleteAll();
-		DataService ds = new DataServiceImpl("data_test.json");
-		ds.loadData();
+		dataService.loadData();
 	}
 
 	@Test
 	void getAllTest() {
-		FireStationDao fireStationDao = new FireStationDaoImpl();
 		int nbItem = fireStationDao.getAll().size();
 		assertTrue(nbItem > 1);
 	}
@@ -33,7 +42,6 @@ class FireStationDaoTest {
 		FireStation fireStation = new FireStation();
 		fireStation.setAddress("address");
 		fireStation.setStation("100");
-		FireStationDao fireStationDao = new FireStationDaoImpl();
 		int nbItem = fireStationDao.getAll().size();
 		fireStationDao.addFireStation(fireStation);
 		assertTrue(nbItem + 1 == fireStationDao.getAll().size());
@@ -49,7 +57,6 @@ class FireStationDaoTest {
 		FireStation fireStation = new FireStation();
 		fireStation.setAddress(addressKey);
 		fireStation.setStation("888");
-		FireStationDao fireStationDao = new FireStationDaoImpl();
 		fireStationDao.addFireStation(fireStation);
 		// Mise a jour de la station avec vakeur finale
 		fireStation.setStation(stationValue);
@@ -69,7 +76,6 @@ class FireStationDaoTest {
 		FireStation fireStation = new FireStation();
 		fireStation.setAddress("address1");
 		fireStation.setStation("100");
-		FireStationDao fireStationDao = new FireStationDaoImpl();
 		int nbItem1 = fireStationDao.getAll().size();
 		fireStationDao.addFireStation(fireStation);
 		int nbItem2 = fireStationDao.getAll().size();
@@ -88,7 +94,6 @@ class FireStationDaoTest {
 		FireStation fireStation = new FireStation();
 		fireStation.setAddress("address10");
 		fireStation.setStation("100");
-		FireStationDao fireStationDao = new FireStationDaoImpl();
 		int nbItem1 = fireStationDao.getAll().size();
 		fireStationDao.addFireStation(fireStation);
 		int nbItem2 = fireStationDao.getAll().size();
@@ -107,7 +112,6 @@ class FireStationDaoTest {
 		FireStation fireStation = new FireStation();
 		fireStation.setAddress("125 rue des tulipiers");
 		fireStation.setStation("127585");
-		FireStationDao fireStationDao = new FireStationDaoImpl();
 		fireStationDao.addFireStation(fireStation);
 		assertTrue(fireStationDao.searchByAddress("125 rue des tulipiers").getStation().toString() == "127585");
 
@@ -115,7 +119,6 @@ class FireStationDaoTest {
 	
 	@Test
 	void searchByStationTest() {
-		FireStationDao fireStationDao = new FireStationDaoImpl();
 		FireStation fireStation;
 		fireStation = new FireStation();
 		fireStation.setAddress("address1");

@@ -9,8 +9,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
 import com.jsoniter.JsonIterator;
@@ -29,8 +30,11 @@ import com.safetynet.p5_alerts.model.Person;
 
 import ch.qos.logback.classic.Logger;
 
-@Service
+@Component
 public class DataServiceImpl implements DataService {
+
+	@Value("${custom.filename}")
+	private String filename;
 
 	private static List<Person> persons = new ArrayList<>();
 	private static List<FireStation> firestations = new ArrayList<>();
@@ -52,6 +56,7 @@ public class DataServiceImpl implements DataService {
 	}
 
 	private void loadPerson(Any any) {
+		log.debug("DataServiceImpl : loadPerson");
 		Person.Builder personlBuilder = new Person.Builder();
 		Person p = personlBuilder.setFirstname(any.get("firstName").toString())
 				.setLastname(any.get("lastName").toString()).setAddress(any.get("address").toString())
@@ -61,6 +66,7 @@ public class DataServiceImpl implements DataService {
 	}
 
 	private void loadFirestations(Any any) {
+		log.debug("DataServiceImpl : loadFirestations");
 		FireStation f = new FireStation();
 		f.setAddress(any.get("address").toString());
 		f.setStation(any.get("station").toString());
@@ -69,6 +75,7 @@ public class DataServiceImpl implements DataService {
 
 	private void loadMedicalRecords(Any any) {
 		try {
+			log.debug("DataServiceImpl : loadMedicalRecords");
 			MedicalRecord m = new MedicalRecord();
 			m.setFirstname(any.get("firstName").toString());
 			m.setLastname(any.get("lastName").toString());
@@ -84,15 +91,21 @@ public class DataServiceImpl implements DataService {
 			m.setAllergies(allergies);
 			medicalrecords.add(m);
 		} catch (ParseException e) {
-			log.error("Error loading loadMedicalRecords", e);
+			log.error("DataServiceImpl Error loading loadMedicalRecords", e);
 		}
 	}
 
 	@Override
-	public void loadData() {
+	public void loadData() throws IOException {
 		try {
-			log.info("loadData : debut");
-			String data = StreamUtils.copyToString(new ClassPathResource(this.dataRessourceName).getInputStream(),
+			log.debug("DataServiceImpl : loadPerson");
+			String pathFile = filename;
+			if (filename == null) {
+				pathFile = this.dataRessourceName;
+			}
+			log.info("loadData : debut / this.dataRessourceName / filename /  pathFile : " + this.dataRessourceName
+					+ "/" + filename + "/" + pathFile);
+			String data = StreamUtils.copyToString(new ClassPathResource(pathFile).getInputStream(),
 					Charset.forName("UTF-8"));
 			JsonIterator jsoniterator = JsonIterator.parse(data);
 			Any any = jsoniterator.readAny();
@@ -113,11 +126,12 @@ public class DataServiceImpl implements DataService {
 			medicalRecordDao = new MedicalRecordDaoImpl();
 			medicalRecordDao.setMedicalRecords(inputData.getMedicalRecords());
 			//
-			String logchgt = "persons:" + persons.size() + " / firestations:" + firestations.size()
+			String logchgt = "loadData / persons:" + persons.size() + " / firestations:" + firestations.size()
 					+ " / medicalrecords:" + medicalrecords.size();
 			log.info(logchgt);
 		} catch (IOException e) {
-			log.error("Error loading loadData", e);
+			log.error("DataServiceImpl Error loading loadData", e);
+			throw e;
 		}
 	}
 

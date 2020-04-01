@@ -25,32 +25,36 @@ public class FireStationController {
 
 	@GetMapping(value = "firestation/all")
 	public List<FireStation> all() {
-		log.info("persons/all : list of persons");
+		log.debug("persons/all : list of persons");
 		return fireStationService.getFireStations();
 	}
 
 	@PostMapping(value = "firestation")
 	public boolean addFireStation(@RequestBody FireStation fireStation) {
-		log.info("Create a firestation");
+		log.debug("Create a firestation");
 		return fireStationService.addFireStation(fireStation);
 	}
 
 	@PutMapping(value = "firestation")
 	public boolean updateFireStation(@RequestBody FireStation fireStation) {
-		log.info("Update a firestation by address");
+		log.debug("Update a firestation by address");
 		return fireStationService.updateFireStation(fireStation);
 	}
 
-	@DeleteMapping(value = "firestationByStation")
-	public boolean deleteFireStationByStation(@RequestBody FireStation fireStation) {
-		log.info("Detete a firestation ByStation");
-		return fireStationService.deleteFireStationbyStation(fireStation);
-	}
-
-	@DeleteMapping(value = "firestationByAddress")
-	public boolean deleteFireStationByAddress(@RequestBody FireStation fireStation) {
-		log.info("Detete a firestation ByAddress");
-		return fireStationService.deleteFireStationbyAddress(fireStation);
+	@DeleteMapping(value = "firestation")
+	public List<FireStation> deleteFireStationByStation(@RequestBody FireStation fireStation) {
+		log.debug("Detete a firestation");
+		if(fireStation == null || (fireStation.getStation().isEmpty() && fireStation.getAddress().isEmpty())) {
+			throw new IllegalArgumentException();
+		}
+		if (!fireStation.getAddress().isEmpty()) {
+			return fireStationService.deleteFireStationbyAddress(fireStation);
+		} else {
+			if (!fireStation.getStation().isEmpty()) {
+				return fireStationService.deleteFireStationbyStation(fireStation);
+			}
+		}
+		return null;
 	}
 
 }

@@ -17,10 +17,11 @@ public interface FireStationDao {
 	// Mise à jour FireStation
 	public boolean updateFireStation(FireStation fireStation);
 
-	// suppression FireStation
-	public boolean deleteFireStationStation(FireStation fireStation);
-
-	public boolean deleteFireStationAddress(FireStation fireStation);
+	// suppression FireStation par station
+	public List<FireStation> deleteFireStationStation(FireStation fireStation);
+	
+	// suppression FireStation par address
+	public List<FireStation> deleteFireStationAddress(FireStation fireStation);
 
 	// suppression de toutes les FireStation
 	public boolean deleteAll();

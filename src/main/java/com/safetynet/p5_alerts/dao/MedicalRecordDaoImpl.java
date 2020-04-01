@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.safetynet.p5_alerts.model.MedicalRecord;
 import com.safetynet.p5_alerts.model.Person;
+import com.safetynet.p5_alerts.model.PersonForAPIDelete;
 
 import ch.qos.logback.classic.Logger;
 
@@ -23,19 +24,20 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
 	
 	@Override
 	public void setMedicalRecords(List<MedicalRecord> medicalRecords) {
-		log.info("MedicalRecordDao setMedicalRecords");
+		log.debug("MedicalRecordDao setMedicalRecords");
 		medicalRecordData = medicalRecords;
 	}
 
 	@Override
 	public List<MedicalRecord> getAll() {
+		log.debug("MedicalRecordDao getAll");
 		return medicalRecordData;
 	}
 	
 	// Recherche par prenom, nom
 	@Override
 	public MedicalRecord searchByName(String firstName, String lastName) {
-		log.info("MedicalRecordDao searchByName");
+		log.debug("MedicalRecordDao searchByName");
 		for (MedicalRecord medicalRecord : medicalRecordData) {
 			if (medicalRecord.getFirstname().equals(firstName) && medicalRecord.getLastname().equals(lastName)) {
 				return medicalRecord;
@@ -46,14 +48,14 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
 
 	@Override
 	public boolean addMedicalRecord(MedicalRecord medicalRecord) {
-		log.info("MedicalRecordDao addMedicalRecord");
+		log.debug("MedicalRecordDao addMedicalRecord");
 		medicalRecordData.add(medicalRecord);
 		return true;
 	}
 
 	@Override
 	public boolean updateMedicalRecord(MedicalRecord medicalRecord) {
-		log.info("MedicalRecordDao addMedicalRecord");
+		log.debug("MedicalRecordDao addMedicalRecord");
 		int pos = 0;
 		boolean isFound = false;
 		for (MedicalRecord mr : medicalRecordData) {
@@ -67,13 +69,13 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
 	}
 
 	@Override
-	public boolean deleteMedicalRecord(MedicalRecord medicalRecord) {
-		log.info("MedicalRecordDao deleteMedicalRecord");
+	public boolean deleteMedicalRecord(PersonForAPIDelete person) {
+		log.debug("MedicalRecordDao deleteMedicalRecord");
 		boolean isFound = false;
 		Iterator<MedicalRecord> i = medicalRecordData.iterator();
 		while (i.hasNext()) {
 			MedicalRecord o = i.next();
-			if (o.getFirstname().equals(medicalRecord.getFirstname().toString()) && o.getLastname().equals(medicalRecord.getLastname().toString())) {
+			if (o.getFirstname().equals(person.getFirstname().toString()) && o.getLastname().equals(person.getLastname().toString())) {
 				i.remove();
 				isFound = true;
 			}
@@ -83,7 +85,7 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
 
 	@Override
 	public boolean deleteAll() {
-		log.info("MedicalRecordDao deleteAll");
+		log.debug("MedicalRecordDao deleteAll");
 		if (medicalRecordData != null) {
 			medicalRecordData.clear();
 		}
