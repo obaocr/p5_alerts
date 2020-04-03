@@ -18,6 +18,7 @@ import com.safetynet.p5_alerts.model.HouseholdResponse;
 import com.safetynet.p5_alerts.model.MedicalRecord;
 import com.safetynet.p5_alerts.model.Person;
 import com.safetynet.p5_alerts.model.PersonForFlood;
+import com.safetynet.p5_alerts.util.EntityNotFoundException;
 import com.safetynet.p5_alerts.util.Utils;
 
 import ch.qos.logback.classic.Logger;
@@ -95,8 +96,13 @@ public class FloodStationServiceImpl implements FloodStationService {
 				households.add(household);
 			}
 		}
-		householdResponse.setHouseholds(households);
-		return householdResponse;
+		if (households.isEmpty()) {
+			throw new EntityNotFoundException("No households found for stations: " + stations);
+		} else {
+			householdResponse.setHouseholds(households);
+			return householdResponse;
+		}
+
 	}
 
 }

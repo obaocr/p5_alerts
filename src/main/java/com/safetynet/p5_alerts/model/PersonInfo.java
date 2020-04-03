@@ -2,6 +2,9 @@ package com.safetynet.p5_alerts.model;
 
 import java.util.List;
 
+/**
+ * Model PersonInfo
+ */
 public class PersonInfo {
 	private String firstname;
 	private String lastname;

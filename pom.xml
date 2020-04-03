@@ -52,7 +52,7 @@
 			<artifactId>maven-assembly-plugin</artifactId>
 			<version>3.0.0</version>
 		</dependency>
-		
+
 		<!-- exclude log4j2 -->
 		<dependency>
 			<groupId>com.github.spotbugs</groupId>
@@ -71,15 +71,49 @@
 			<artifactId>jsoniter</artifactId>
 			<version>0.9.19</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>
 		<plugins>
+
+			<!-- jacoco -->
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<!-- attached to Maven test phase -->
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
+
 		</plugins>
 	</build>
+
+	<!-- Pour generer le rapport spotbug -->
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>3.1.8</version>
+				<configuration>
+					<failOnError>false</failOnError>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 
 </project>

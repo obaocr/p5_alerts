@@ -19,7 +19,15 @@ class HomeControllerTest {
 	
 	@Autowired
 	PersonController personController;
+	
+	@Autowired
+	HomeController homeController;
 
+	@Test
+	public void homeControllerLoads() throws Exception {
+		assertThat(homeController).isNotNull();
+	}
+	
 	@Test
 	public void mainControllerLoads() throws Exception {
 		assertThat(mainController).isNotNull();

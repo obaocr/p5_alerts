@@ -14,6 +14,9 @@ import com.safetynet.p5_alerts.model.FireStation;
 
 import ch.qos.logback.classic.Logger;
 
+/**
+ * FireStationDao implementation
+ */
 @Repository
 public class FireStationDaoImpl implements FireStationDao {
 
@@ -28,7 +31,7 @@ public class FireStationDaoImpl implements FireStationDao {
 	@Override
 	public void setFireStations(List<FireStation> fireStations) {
 		log.debug("FireStationDao deleteAll : delete all FireStation");
-		fireStationData = fireStations;
+		this.fireStationData = fireStations;
 	}
 
 	// Liste des FireStation
@@ -53,7 +56,7 @@ public class FireStationDaoImpl implements FireStationDao {
 		int pos = 0;
 		boolean isFound = false;
 		for (FireStation fs : fireStationData) {
-			if (fs.getAddress().equals(fireStation.getAddress().toString())) {
+			if (fs.getAddress().equals(fireStation.getAddress())) {
 				fireStationData.set(pos, fireStation);
 				isFound = true;
 			}
@@ -71,7 +74,7 @@ public class FireStationDaoImpl implements FireStationDao {
 		Iterator<FireStation> i = fireStationData.iterator();
 		while (i.hasNext()) {
 			FireStation o = i.next();
-			if (o.getStation().equals(fireStation.getStation().toString())) {
+			if (o.getStation().equals(fireStation.getStation())) {
 				FireStation fs = new FireStation();
 				fs.setStation(o.getStation());
 				fs.setAddress(o.getAddress());
@@ -91,7 +94,7 @@ public class FireStationDaoImpl implements FireStationDao {
 		Iterator<FireStation> i = fireStationData.iterator();
 		while (i.hasNext()) {
 			FireStation o = i.next();
-			if (o.getAddress().equals(fireStation.getAddress().toString())) {
+			if (o.getAddress().equals(fireStation.getAddress())) {
 				FireStation fs = new FireStation();
 				fs.setStation(o.getStation());
 				fs.setAddress(o.getAddress());

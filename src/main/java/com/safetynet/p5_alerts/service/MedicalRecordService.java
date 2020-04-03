@@ -5,6 +5,9 @@ import java.util.List;
 import com.safetynet.p5_alerts.model.MedicalRecord;
 import com.safetynet.p5_alerts.model.PersonForAPIDelete;
 
+/**
+ * Interface for MedicalRecordService
+ */
 public interface MedicalRecordService {
 	public List<MedicalRecord> getMedicalRecords();
 	public boolean addMedicalRecord(MedicalRecord medicalRecord);

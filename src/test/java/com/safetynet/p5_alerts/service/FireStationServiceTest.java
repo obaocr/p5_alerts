@@ -59,15 +59,15 @@ class FireStationServiceTest {
 	@Test
 	void deleteFireStationAddressStationTest() {
 		FireStation fireStation = new FireStation();
-		fireStation.setAddress("address1");
-		fireStation.setStation("100");
+		fireStation.setAddress("address-deleteFireStationbyAddress");
+		fireStation.setStation("674");
 		int nbItem1 = fireStationService.getFireStations().size();
 		fireStationService.addFireStation(fireStation);
 		int nbItem2 = fireStationService.getFireStations().size();
 		//
 		FireStation fireStation2 = new FireStation();
-		fireStation2.setAddress("address1");
-		fireStation2.setStation("102");
+		fireStation2.setAddress("address-deleteFireStationbyAddress");
+		fireStation2.setStation("674");
 		//
 		fireStationService.deleteFireStationbyAddress(fireStation2);
 		assertTrue(nbItem2 == nbItem1 + 1);

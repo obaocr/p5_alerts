@@ -1,13 +1,10 @@
 package com.safetynet.p5_alerts.service;
 
 import java.io.IOException;
-import java.util.List;
 
-import com.safetynet.p5_alerts.model.FireStation;
-import com.safetynet.p5_alerts.model.MedicalRecord;
-import com.safetynet.p5_alerts.model.Person;
-
-
+/**
+ * Interface for DataService
+ */
 public interface DataService {
 
 	/**

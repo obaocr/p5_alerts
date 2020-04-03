@@ -6,6 +6,9 @@ import com.safetynet.p5_alerts.model.CommunityEmail;
 import com.safetynet.p5_alerts.model.Person;
 import com.safetynet.p5_alerts.model.PersonForAPIDelete;
 
+/**
+ * Interface for PersonDao
+ */
 public interface PersonDao {
 
 	// Alimentation des données initiales

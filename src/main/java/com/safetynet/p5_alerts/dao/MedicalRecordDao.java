@@ -5,6 +5,9 @@ import java.util.List;
 import com.safetynet.p5_alerts.model.MedicalRecord;
 import com.safetynet.p5_alerts.model.PersonForAPIDelete;
 
+/**
+ * Interface for MedicalRecordDao
+ */
 public interface MedicalRecordDao {
 	// Alimentation des données initiales
 	void setMedicalRecords(List<MedicalRecord> medicalRecords);

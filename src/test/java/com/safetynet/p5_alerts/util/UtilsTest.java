@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class UtilsTest {
 
 	@Test
-	void CalculateAgeFromBirthDateTest() throws ParseException {
+	void calculateAgeFromBirthDateTest() throws ParseException {
 		Date birthDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2000");
 		int age = Utils.calculateAgeFromBirthDate(birthDate);
 		assertTrue(age > 18);

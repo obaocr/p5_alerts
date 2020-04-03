@@ -2,6 +2,9 @@ package com.safetynet.p5_alerts.model;
 
 import java.util.List;
 
+/*
+ * Model ChildAlert
+ */
 public class ChildAlert {
 	private String firstname;
 	private String lastname;

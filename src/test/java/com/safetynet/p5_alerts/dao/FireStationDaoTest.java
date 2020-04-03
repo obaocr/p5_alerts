@@ -113,7 +113,7 @@ class FireStationDaoTest {
 		fireStation.setAddress("125 rue des tulipiers");
 		fireStation.setStation("127585");
 		fireStationDao.addFireStation(fireStation);
-		assertTrue(fireStationDao.searchByAddress("125 rue des tulipiers").getStation().toString() == "127585");
+		assertTrue(fireStationDao.searchByAddress("125 rue des tulipiers").getStation().equals("127585"));
 
 	}
 	

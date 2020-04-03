@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.safetynet.p5_alerts.model.FireStation;
 import com.safetynet.p5_alerts.service.FireStationService;
+import com.safetynet.p5_alerts.util.EntityIllegalArgumentException;
 
 import ch.qos.logback.classic.Logger;
 
+/**
+ * Controller for FireStation object
+ */
 @RestController
 public class FireStationController {
 	Logger log = (Logger) LoggerFactory.getLogger(FireStationController.class);
@@ -29,24 +33,30 @@ public class FireStationController {
 		return fireStationService.getFireStations();
 	}
 
+	private void checkInput(FireStation fireStation) {
+		if(fireStation == null || fireStation.getAddress().isEmpty() || fireStation.getStation().isEmpty()) {
+			throw new EntityIllegalArgumentException("Address and Station are mandatory");
+		}
+	}
+	
 	@PostMapping(value = "firestation")
 	public boolean addFireStation(@RequestBody FireStation fireStation) {
 		log.debug("Create a firestation");
+		checkInput(fireStation);
 		return fireStationService.addFireStation(fireStation);
 	}
 
 	@PutMapping(value = "firestation")
 	public boolean updateFireStation(@RequestBody FireStation fireStation) {
 		log.debug("Update a firestation by address");
+		checkInput(fireStation);
 		return fireStationService.updateFireStation(fireStation);
 	}
 
 	@DeleteMapping(value = "firestation")
-	public List<FireStation> deleteFireStationByStation(@RequestBody FireStation fireStation) {
+	public List<FireStation> deleteFireStation(@RequestBody FireStation fireStation) {
 		log.debug("Detete a firestation");
-		if(fireStation == null || (fireStation.getStation().isEmpty() && fireStation.getAddress().isEmpty())) {
-			throw new IllegalArgumentException();
-		}
+		checkInput(fireStation);
 		if (!fireStation.getAddress().isEmpty()) {
 			return fireStationService.deleteFireStationbyAddress(fireStation);
 		} else {

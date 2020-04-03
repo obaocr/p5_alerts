@@ -1,5 +1,8 @@
 package com.safetynet.p5_alerts.model;
 
+/**
+ * Model Person
+ */
 public class Person {
 	private String firstname;
 	private String lastname;

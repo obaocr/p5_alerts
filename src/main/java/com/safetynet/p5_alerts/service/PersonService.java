@@ -1,17 +1,15 @@
 package com.safetynet.p5_alerts.service;
 
-import java.io.IOException;
 import java.util.List;
 
 import com.safetynet.p5_alerts.model.Person;
 import com.safetynet.p5_alerts.model.PersonForAPIDelete;
 
+/**
+ * Interface for PersonService
+ */
 public interface PersonService {
 
-	/**
-	 * 
-	 * @throws IOException
-	 */
 	public List<Person> getPersons();
 
 	public boolean addPerson(Person person);

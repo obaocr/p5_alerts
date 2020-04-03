@@ -7,11 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.safetynet.p5_alerts.model.MedicalRecord;
-import com.safetynet.p5_alerts.model.Person;
 import com.safetynet.p5_alerts.model.PersonForAPIDelete;
 
 import ch.qos.logback.classic.Logger;
 
+/**
+ * PersonDao implementation
+ */
 @Repository
 public class MedicalRecordDaoImpl implements MedicalRecordDao {
 	
@@ -25,7 +27,7 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
 	@Override
 	public void setMedicalRecords(List<MedicalRecord> medicalRecords) {
 		log.debug("MedicalRecordDao setMedicalRecords");
-		medicalRecordData = medicalRecords;
+		this.medicalRecordData = medicalRecords;
 	}
 
 	@Override
@@ -59,7 +61,7 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
 		int pos = 0;
 		boolean isFound = false;
 		for (MedicalRecord mr : medicalRecordData) {
-			if (mr.getFirstname().equals(medicalRecord.getFirstname().toString()) && mr.getLastname().equals(medicalRecord.getLastname().toString())) {
+			if (mr.getFirstname().equals(medicalRecord.getFirstname()) && mr.getLastname().equals(medicalRecord.getLastname())) {
 				medicalRecordData.set(pos, medicalRecord);
 				isFound = true;
 			}
@@ -75,7 +77,7 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
 		Iterator<MedicalRecord> i = medicalRecordData.iterator();
 		while (i.hasNext()) {
 			MedicalRecord o = i.next();
-			if (o.getFirstname().equals(person.getFirstname().toString()) && o.getLastname().equals(person.getLastname().toString())) {
+			if (o.getFirstname().equals(person.getFirstname()) && o.getLastname().equals(person.getLastname())) {
 				i.remove();
 				isFound = true;
 			}

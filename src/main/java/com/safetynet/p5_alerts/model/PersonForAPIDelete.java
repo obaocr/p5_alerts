@@ -1,5 +1,8 @@
 package com.safetynet.p5_alerts.model;
 
+/**
+ * Model PersonForAPIDelete
+ */
 public class PersonForAPIDelete {
 	
 	private String firstname;

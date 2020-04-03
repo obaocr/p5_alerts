@@ -49,7 +49,7 @@ public class MainServiceImpl implements MainService {
 	@Override
 	public CommunityEmail getCommunityEmails(String city) {
 		if (personDao.getCommunityEmails(city).getEmails().isEmpty()) {
-			throw new EntityNotFoundException("No emails found for the city:" + city);
+			throw new EntityNotFoundException("No emails found for the city: " + city);
 		} else {
 			return personDao.getCommunityEmails(city);
 		}
@@ -70,8 +70,8 @@ public class MainServiceImpl implements MainService {
 					System.out.println("match !");
 					personInfo = new PersonInfo();
 					int age = Utils.calculateAgeFromBirthDate(mr.getBirthDate());
-					personInfo.setFirstname(psn.getFirstname().toString());
-					personInfo.setLastname(psn.getLastname().toString());
+					personInfo.setFirstname(psn.getFirstname());
+					personInfo.setLastname(psn.getLastname());
 					personInfo.setAge(age);
 					personInfo.setEmail(psn.getEmail().toString());
 					personInfo.setAddress(psn.getAddress().toString());
@@ -81,8 +81,12 @@ public class MainServiceImpl implements MainService {
 				}
 			}
 		}
-		PersonInfoResponse.setPersonInfos(personInfos);
-		return PersonInfoResponse;
+		if (personInfos.isEmpty()) {
+			throw new EntityNotFoundException("No personInfo found for lastName/firstName: " + lastName + "/"+firstName);
+		} else {
+			PersonInfoResponse.setPersonInfos(personInfos);
+			return PersonInfoResponse;
+		}
 	}
 
 	@Override
@@ -109,18 +113,20 @@ public class MainServiceImpl implements MainService {
 				for (Person psn : personDao.getAll()) {
 					if (psn.getAddress().equals(address) && !(psn.getFirstname().equals(mr.getFirstname())
 							&& psn.getLastname().equals(mr.getLastname()))) {
-						System.out.println("membre trouve : " + psn.getFirstname());
 						membres.add(psn);
 					}
 				}
-				System.out.println("fin boucle");
 				childAlert.setPersons(membres);
 				childAlerts.add(childAlert);
 			}
 		}
-		System.out.println("liste 1 childAlerts size : " + childAlerts.size());
-		childAlertResponse.setChildAlerts(childAlerts);
-		return childAlertResponse;
+		if (childAlerts.isEmpty()) {
+			throw new EntityNotFoundException("No childAlert found for address: " + address);
+		} else {
+			childAlertResponse.setChildAlerts(childAlerts);
+			return childAlertResponse;
+		}
+		
 	}
 
 	@Override
@@ -168,8 +174,11 @@ public class MainServiceImpl implements MainService {
 			firestationPerson.setNbOfAdult(nbOfAdult);
 			firestationPerson.setPersonForFirestations(personForFirestations);
 		}
-		// gérer code retour not found ...
-		return isStationFound == true ? firestationPerson : null;
+		if (!isStationFound) {
+			throw new EntityNotFoundException("No FirestationPerson found for station: " + station);
+		} else {
+			return firestationPerson;
+		}
 	}
 
 	// Les telephones des personnes desservies par adresse de la station
@@ -179,7 +188,7 @@ public class MainServiceImpl implements MainService {
 		log.debug("MainServiceImpl phoneAlert : Phone for an address firestation");
 		PhoneAlert phoneAlert = new PhoneAlert();
 		Set<String> setPhone = new HashSet<>();
-		List<String> phones = new ArrayList<>();
+		List<String> phones;
 		List<Person> persons;
 		for (FireStation fireStation : fireStationDao.getAll()) {
 			if (fireStation.getStation().equals(firestation_number)) {
@@ -193,7 +202,11 @@ public class MainServiceImpl implements MainService {
 			phones = setPhone.stream().collect(Collectors.toList());
 			phoneAlert.setPhones(phones);
 		}
-		return phoneAlert;
+		if (setPhone.isEmpty()) {
+			throw new EntityNotFoundException("No FirestationPerson found for firestation_number: " + firestation_number);
+		} else {
+			return phoneAlert;
+		}
 	}
 
 	@Override
@@ -225,8 +238,12 @@ public class MainServiceImpl implements MainService {
 			lpersonForFirestationAddress.add(personForFirestationAddress);
 
 		}
-		personForFirestationAddressResponse.setPersonForFirestationAddress(lpersonForFirestationAddress);
-		return personForFirestationAddressResponse;
+		if (lpersonForFirestationAddress.isEmpty()) {
+			throw new EntityNotFoundException("No PersonForFirestationAddressResponse found for address: " + address);
+		} else {
+			personForFirestationAddressResponse.setPersonForFirestationAddress(lpersonForFirestationAddress);
+			return personForFirestationAddressResponse;
+		}
 	}
 
 }

@@ -14,9 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.safetynet.p5_alerts.model.MedicalRecord;
 import com.safetynet.p5_alerts.model.PersonForAPIDelete;
 import com.safetynet.p5_alerts.service.MedicalRecordService;
+import com.safetynet.p5_alerts.util.EntityIllegalArgumentException;
 
 import ch.qos.logback.classic.Logger;
 
+/**
+ * Controller for MedicalRecord object
+ */
 @RestController
 public class MedicalRecordController {
 	Logger log = (Logger) LoggerFactory.getLogger(MedicalRecordController.class);
@@ -30,24 +34,36 @@ public class MedicalRecordController {
 		return medicalRecordService.getMedicalRecords();
 	}
 
+	private void checkInput(MedicalRecord medicalRecord) {
+		if (medicalRecord == null || medicalRecord.getFirstname().isEmpty() || medicalRecord.getLastname().isEmpty()) {
+			throw new EntityIllegalArgumentException("Firstname and Lastname are mandatory");
+		}
+	}
+	
+	private void checkInputPersonForAPIDelete(PersonForAPIDelete person) {
+		if (person == null || person.getFirstname().isEmpty() || person.getLastname().isEmpty()) {
+			throw new EntityIllegalArgumentException("Firstname and Lastname are mandatory");
+		}
+	}
+
 	@PostMapping(value = "medicalrecord")
 	public boolean addMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
 		log.debug("Create a medicalrecord");
+		checkInput(medicalRecord);
 		return medicalRecordService.addMedicalRecord(medicalRecord);
 	}
 
 	@PutMapping(value = "medicalrecord")
 	public boolean updateMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
 		log.debug("Update a medicalrecord by address");
+		checkInput(medicalRecord);
 		return medicalRecordService.updateMedicalRecord(medicalRecord);
 	}
 
 	@DeleteMapping(value = "medicalrecord")
 	public boolean deleteMedicalRecord(@RequestBody PersonForAPIDelete person) {
 		log.debug("Detete a medicalrecord");
-		if(person == null || person.getFirstname().isEmpty() || person.getLastname().isEmpty()) {
-			throw new IllegalArgumentException();
-		}
+		checkInputPersonForAPIDelete(person);
 		return medicalRecordService.deleteMedicalRecord(person);
 	}
 

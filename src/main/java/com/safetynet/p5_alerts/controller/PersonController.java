@@ -14,9 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.safetynet.p5_alerts.model.Person;
 import com.safetynet.p5_alerts.model.PersonForAPIDelete;
 import com.safetynet.p5_alerts.service.PersonService;
+import com.safetynet.p5_alerts.util.EntityIllegalArgumentException;
 
 import ch.qos.logback.classic.Logger;
 
+/**
+ * Controller for Person object
+ */
 @RestController
 public class PersonController {
 
@@ -30,25 +34,37 @@ public class PersonController {
 		log.debug("persons/all : list of persons");
 		return personService.getPersons();
 	}
-
+	
+	private void checkInputPerson(Person person) {
+		if(person == null || person.getFirstname().isEmpty() || person.getLastname().isEmpty()) {
+			throw new EntityIllegalArgumentException("Firstname and Lastname are mandatory");
+		}
+	}
+	
+	private void checkInputPersonForAPIDelete(PersonForAPIDelete person) {
+		if(person == null || person.getFirstname().isEmpty() || person.getLastname().isEmpty()) {
+			throw new EntityIllegalArgumentException("Firstname and Lastname are mandatory");
+		}
+	}
+	
 	@PostMapping(value = "person")
 	public boolean addPerson(@RequestBody Person person) {
 		log.debug("Create a person");
+		checkInputPerson(person);
 		return personService.addPerson(person);
 	}
 
 	@PutMapping(value = "person")
 	public boolean updatePerson(@RequestBody Person person) {
 		log.debug("Update a person");
+		checkInputPerson(person);
 		return personService.updatePerson(person);
 	}
 
 	@DeleteMapping(value = "person")
 	public boolean deletePerson(@RequestBody PersonForAPIDelete person) {
 		log.debug("Detete a person");
-		if(person == null || person.getFirstname().isEmpty() || person.getLastname().isEmpty()) {
-			throw new IllegalArgumentException();
-		}
+		checkInputPersonForAPIDelete(person);
 		return personService.deletePerson(person);
 	}
 

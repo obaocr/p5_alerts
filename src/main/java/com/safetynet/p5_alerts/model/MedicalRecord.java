@@ -3,6 +3,9 @@ package com.safetynet.p5_alerts.model;
 import java.util.Date;
 import java.util.List;
 
+/*
+ * Model MedicalRecord
+ */
 public class MedicalRecord {
 	private String firstname;
 	private String lastname;
@@ -27,11 +30,11 @@ public class MedicalRecord {
 	}
 
 	public Date getBirthDate() {
-		return birthDate;
+		return birthDate != null ? new Date(birthDate.getTime()) : null;
 	}
 
 	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
+		this.birthDate = birthDate != null ? new Date(birthDate.getTime()) : null;
 	}
 
 	public List<String> getMedications() {

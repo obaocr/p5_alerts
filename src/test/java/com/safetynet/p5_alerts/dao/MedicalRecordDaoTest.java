@@ -45,7 +45,6 @@ class MedicalRecordDaoTest {
 	@Test
 	void searchByNameTest() throws ParseException {
 		MedicalRecord medicalRecord = new MedicalRecord();
-		int nbItem = medicalRecordDao.getAll().size();
 		// Ajout d'un item
 		medicalRecord.setFirstname("Xavier-Emmanuel");
 		medicalRecord.setLastname("Dupont");

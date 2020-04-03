@@ -1,5 +1,8 @@
 package com.safetynet.p5_alerts.model;
 
+/*
+ * Model FireStation
+ */
 public class FireStation {
 	
 	private String station;

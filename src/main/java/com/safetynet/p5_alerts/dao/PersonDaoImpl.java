@@ -17,8 +17,7 @@ import com.safetynet.p5_alerts.model.PersonForAPIDelete;
 import ch.qos.logback.classic.Logger;
 
 /**
- * @author S063912
- *
+ * PersonDao implementation
  */
 @Repository
 public class PersonDaoImpl implements PersonDao {
@@ -32,7 +31,7 @@ public class PersonDaoImpl implements PersonDao {
 	}
 
 	public void setPersons(List<Person> persons) {
-		personData = persons;
+		this.personData = persons;
 	}
 
 	// Retourne toutes les personnes
@@ -74,14 +73,13 @@ public class PersonDaoImpl implements PersonDao {
 		log.debug(" PersonDao communityEmail : list persons emails for a city");
 		CommunityEmail communityEmail = new CommunityEmail();
 		Set<String> setEmails = new HashSet<>();
-		List<String> emails = new ArrayList<>();
 		for (Person person : personData) {
 			// !!! mettre equals pour tester la valeur sinon KO !!!
 			if (person.getCity().equals(city)) {
 				setEmails.add(person.getEmail());
 			}
 		}
-		emails = setEmails.stream().collect(Collectors.toList());
+		List<String> emails = setEmails.stream().collect(Collectors.toList());
 		communityEmail.setEmails(emails);
 		return communityEmail;
 	}
@@ -101,8 +99,8 @@ public class PersonDaoImpl implements PersonDao {
 		int pos = 0;
 		boolean isFound = false;
 		for (Person p : personData) {
-			if (p.getFirstname().equals(person.getFirstname().toString())
-					&& p.getLastname().equals(person.getLastname().toString())) {
+			if (p.getFirstname().equals(person.getFirstname())
+					&& p.getLastname().equals(person.getLastname())) {
 				personData.set(pos, person);
 				isFound = true;
 			}
@@ -119,8 +117,8 @@ public class PersonDaoImpl implements PersonDao {
 		Iterator<Person> i = personData.iterator();
 		while (i.hasNext()) {
 			Person o = i.next();
-			if (o.getFirstname().equals(person.getFirstname().toString())
-					&& o.getLastname().equals(person.getLastname().toString())) {
+			if (o.getFirstname().equals(person.getFirstname())
+					&& o.getLastname().equals(person.getLastname())) {
 				i.remove();
 				isFound = true;
 			}

@@ -1,32 +1,35 @@
 package com.safetynet.p5_alerts.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
-import com.safetynet.p5_alerts.model.ChildAlert;
+import com.safetynet.p5_alerts.dao.FireStationDao;
+import com.safetynet.p5_alerts.dao.MedicalRecordDao;
+import com.safetynet.p5_alerts.dao.PersonDao;
 import com.safetynet.p5_alerts.model.ChildAlertResponse;
 import com.safetynet.p5_alerts.model.CommunityEmail;
+import com.safetynet.p5_alerts.model.FireStation;
 import com.safetynet.p5_alerts.model.FirestationPerson;
-import com.safetynet.p5_alerts.model.Household;
 import com.safetynet.p5_alerts.model.HouseholdResponse;
 import com.safetynet.p5_alerts.model.MedicalRecord;
 import com.safetynet.p5_alerts.model.Person;
-import com.safetynet.p5_alerts.model.PersonForFirestationAddress;
 import com.safetynet.p5_alerts.model.PersonForFirestationAddressResponse;
-import com.safetynet.p5_alerts.model.PersonInfo;
 import com.safetynet.p5_alerts.model.PersonInfoResponse;
 import com.safetynet.p5_alerts.model.PhoneAlert;
+import com.safetynet.p5_alerts.util.EntityNotFoundException;
 
 @ContextConfiguration
 @SpringBootTest
@@ -47,20 +50,30 @@ class MainServiceTest {
 	@Autowired
 	private FloodStationService floodStationService;
 
-	@BeforeAll
-	private static void initData() {
-		// On ne fait rien, le command line runner est demarré apres le @BeforeAll et
-		// charge les donnnées
+	@Autowired
+	private PersonDao personDao;
+	
+	@Autowired
+	private FireStationDao fireStationDao;
+	
+	@Autowired
+	private MedicalRecordDao medicalRecordDao;
+	
+	@Autowired
+	private DataService dataService;
+	
+	@BeforeEach
+	private void initData() throws IOException {
+		// Before Each car le Before All est exécuté avant le conetxte spring et donc avant le commandLineRunner
+		personDao.deleteAll();
+		fireStationDao.deleteAll();
+		medicalRecordDao.deleteAll();
+		dataService.loadData();
 	}
 
 	@Test
-	void getCommunityEmails() {
+	void getCommunityEmailsTest() {
 		//
-		System.out.println("** MainService getCommunityEmails/ fireStationService : "
-				+ fireStationService.getFireStations().size());
-		System.out.println("** MainService getCommunityEmails/ personService : " + personService.getPersons().size());
-		System.out.println("** MainService getCommunityEmails/ medicalRecordService : "
-				+ medicalRecordService.getMedicalRecords().size());
 		// Ajout psn
 		Person.Builder personlBuilder = new Person.Builder();
 		Person p = personlBuilder.setFirstname("Olivier").setLastname("Martin").setAddress("address")
@@ -75,7 +88,15 @@ class MainServiceTest {
 		CommunityEmail communityEmail = mainService.getCommunityEmails("cityCommunityEmails");
 		assertTrue(communityEmail.getEmails().size() == 2);
 	}
-
+	
+	@Test
+	void getCommunityEmailsTestException() {
+		//
+		Throwable exception = assertThrows(EntityNotFoundException.class,
+				() -> mainService.getCommunityEmails("xx"));
+		assertTrue(exception.getMessage().contains("No emails found for the city"));
+	}
+	
 	@Test
 	void personInfoTest() throws ParseException {
 		// Ajout psn
@@ -108,23 +129,35 @@ class MainServiceTest {
 	}
 
 	@Test
-	void childAlertTest() {
-		ChildAlertResponse childAlertResponse = new ChildAlertResponse();
-		childAlertResponse = mainService.childAlert("1509 Culver St");
-		System.out.println(
-				"MainServiceTest childAlertTest personService.getPersons() :" + personService.getPersons().size());
-		System.out.println("MainServiceTest childAlertTest ********** !!!!! ***********  :" + childAlertResponse.getChildAlerts().size());
-		assertTrue(childAlertResponse.getChildAlerts().size() == 2);
+	void childAlertTest() throws ParseException {
+		Person.Builder personlBuilder = new Person.Builder();
+		Person p = personlBuilder.setFirstname("prenom-childAlertTest").setLastname("nom-childAlertTest").setAddress("address-childAlertTest")
+				.setCity("Emails").setZip("zip").setPhone("phone").setEmail("Emails.fr")
+				.build();
+		personService.addPerson(p);
+		//
+		MedicalRecord medicalRecord = new MedicalRecord();
+		// Ajout d'un item
+		medicalRecord.setFirstname("prenom-childAlertTest");
+		medicalRecord.setLastname("nom-childAlertTest");
+		Date birthDate = new SimpleDateFormat("dd/MM/yyyy").parse("12/12/2018");
+		medicalRecord.setBirthDate(birthDate);
+		List<String> medications = new ArrayList<>();
+		medications.add("Aspirine");
+		medicalRecord.setMedications(medications);
+		List<String> allergies = new ArrayList<>();
+		medicalRecord.setAllergies(allergies);
+		allergies.add("milk");
+		medicalRecordService.addMedicalRecord(medicalRecord);
+		//
+		ChildAlertResponse childAlertResponse = mainService.childAlert("address-childAlertTest");
+		assertTrue(childAlertResponse.getChildAlerts().size() == 1);
 	}
 
 	@Test
 	void firestationTest() {
 		FirestationPerson firestationPerson;
 		firestationPerson = mainService.firestation("3");
-		System.out.println("MainServiceTest firestationTest getNbOfAdult. :" + firestationPerson.getNbOfAdult());
-		System.out.println("MainServiceTest firestationTest getNbOfChildren. :" + firestationPerson.getNbOfChildren());
-		System.out.println("MainServiceTest firestationTest getPersonForFirestations. :"
-				+ firestationPerson.getPersonForFirestations().size());
 		assertTrue(firestationPerson.getNbOfAdult() == 10);
 		assertTrue(firestationPerson.getNbOfChildren() == 3);
 		assertTrue(firestationPerson.getPersonForFirestations().size() == 13);
@@ -133,16 +166,22 @@ class MainServiceTest {
 	@Test
 	void phoneAlertTest() {
 		PhoneAlert phoneAlert = mainService.phoneAlert("3");
-		System.out.println("MainServiceTest phoneAlertTest getNbOfAdult. :" + phoneAlert.getPhones().size());
 		assertTrue(phoneAlert.getPhones().size() == 7);
 	}
 
 	@Test
 	void fireTest() {
-		PersonForFirestationAddressResponse personForFirestationAddressResponse = new PersonForFirestationAddressResponse();
-		personForFirestationAddressResponse = mainService.fire("1509 Culver St");
-		System.out.println("MainServiceTest fireTest nb  :" + personForFirestationAddressResponse.getPersonForFirestationAddress().size());
-		assertTrue(personForFirestationAddressResponse.getPersonForFirestationAddress().size() == 5);
+		Person.Builder personlBuilder = new Person.Builder();
+		Person p = personlBuilder.setFirstname("prenom-fireTest1").setLastname("nom-fireTest1").setAddress("address-fireTest1")
+				.setCity("city").setZip("zip").setPhone("phone").setEmail("Emails.fr")
+				.build();
+		personService.addPerson(p);
+		FireStation fireStation = new FireStation();
+		fireStation.setAddress("address-fireTest1");
+		fireStation.setStation("station-fireTest1");
+		fireStationService.addFireStation(fireStation);
+		PersonForFirestationAddressResponse personForFirestationAddressResponse = mainService.fire("address-fireTest1");
+		assertTrue(personForFirestationAddressResponse.getPersonForFirestationAddress().size() > 0);
 	}
 
 	@Test
@@ -150,9 +189,7 @@ class MainServiceTest {
 		List<String> stations = new ArrayList<>();
 		stations.add("1");
 		stations.add("3");
-		HouseholdResponse householdResponse = new HouseholdResponse();
-		householdResponse = floodStationService.floodStations(stations);
-		System.out.println("MainServiceTest floodStationsTest nb  :" + householdResponse.getHouseholds().size());
+		HouseholdResponse householdResponse = floodStationService.floodStations(stations);
 		assertTrue(householdResponse.getHouseholds().size() == 7);
 	}
 

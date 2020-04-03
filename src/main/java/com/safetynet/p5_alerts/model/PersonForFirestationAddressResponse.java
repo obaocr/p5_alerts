@@ -2,6 +2,9 @@ package com.safetynet.p5_alerts.model;
 
 import java.util.List;
 
+/**
+ * Model PersonForFirestationAddressResponse
+ */
 public class PersonForFirestationAddressResponse {
 	private List<PersonForFirestationAddress> personForFirestationAddress;
 

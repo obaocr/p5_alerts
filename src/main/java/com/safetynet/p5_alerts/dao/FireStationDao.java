@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.safetynet.p5_alerts.model.FireStation;
 
+/**
+ * Interface for FireStationDao
+ */
 public interface FireStationDao {
 	// Alimentation des données initiales
 	void setFireStations(List<FireStation> fireStation);

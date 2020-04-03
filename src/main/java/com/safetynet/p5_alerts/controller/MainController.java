@@ -17,9 +17,13 @@ import com.safetynet.p5_alerts.model.PersonInfoResponse;
 import com.safetynet.p5_alerts.model.PhoneAlert;
 import com.safetynet.p5_alerts.service.FloodStationService;
 import com.safetynet.p5_alerts.service.MainService;
+import com.safetynet.p5_alerts.util.EntityIllegalArgumentException;
 
 import ch.qos.logback.classic.Logger;
 
+/**
+ * Controller for API Business
+ */
 @RestController
 public class MainController {
 	Logger log = (Logger) LoggerFactory.getLogger(MainController.class);
@@ -43,7 +47,7 @@ public class MainController {
 	@GetMapping(value = "personInfo")
 	public PersonInfoResponse personInfo(@RequestParam String lastName, String firstName) {
 		if (lastName.isEmpty() || firstName.isEmpty()) {
-			throw new IllegalArgumentException();
+			throw new EntityIllegalArgumentException("The parameters lastName and firstName must be set");
 		}
 		log.debug("personInfo : infos persons for a 'name'");
 		return mainService.personInfo(lastName, firstName);
@@ -53,7 +57,7 @@ public class MainController {
 	public ChildAlertResponse childAlert(@RequestParam String address) {
 		log.debug("childAlert : list of children for an address");
 		if (address.isEmpty()) {
-			throw new IllegalArgumentException();
+			throw new EntityIllegalArgumentException("The parameter address must be set");
 		}
 		return mainService.childAlert(address);
 	}
@@ -62,7 +66,7 @@ public class MainController {
 	public FirestationPerson firestationPerson(@RequestParam String stationNumber) {
 		log.debug("firestationPerson : list of person for firestation address");
 		if (stationNumber.isEmpty()) {
-			throw new IllegalArgumentException();
+			throw new EntityIllegalArgumentException("The parameter stationNumber must be set");
 		}
 		return mainService.firestation(stationNumber);
 	}
@@ -80,7 +84,7 @@ public class MainController {
 	public PersonForFirestationAddressResponse fire(@RequestParam String address) {
 		log.info("fire : Persons infos for a firestation address");
 		if (address.isEmpty()) {
-			throw new IllegalArgumentException();
+			throw new EntityIllegalArgumentException("The parameter address must be set");
 		}
 		return mainService.fire(address);
 	}
@@ -88,7 +92,7 @@ public class MainController {
 	@GetMapping(value = "flood/stations")
 	public HouseholdResponse floodStations(@RequestParam List<String> stations) {
 		if (stations.isEmpty()) {
-			throw new IllegalArgumentException();
+			throw new EntityIllegalArgumentException("The parameter stations must be set");
 		}
 		log.info("floodStations : households for stations addresses");
 		return floodStationService.floodStations(stations);
