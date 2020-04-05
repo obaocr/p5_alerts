@@ -31,8 +31,6 @@ class MedicalRecordDaoTest {
 	
 	@BeforeEach
 	private void initData() throws IOException {
-		// Before Each car le Before All est exécuté avant le conetxte spring et donc avant le commandLineRunner
-		medicalRecordDao.deleteAll();
 		dataService.loadData();
 	}
 	

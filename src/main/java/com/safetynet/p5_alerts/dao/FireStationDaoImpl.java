@@ -20,18 +20,21 @@ import ch.qos.logback.classic.Logger;
 @Repository
 public class FireStationDaoImpl implements FireStationDao {
 
-	private static List<FireStation> fireStationData;
+	private static List<FireStation> fireStationData = new ArrayList<>();
 	Logger log = (Logger) LoggerFactory.getLogger(FireStationDaoImpl.class);
 
 	public FireStationDaoImpl() {
-
 	}
 
 	// Alimentation des données initiales
-	@Override
-	public void setFireStations(List<FireStation> fireStations) {
-		log.debug("FireStationDao deleteAll : delete all FireStation");
-		this.fireStationData = fireStations;
+	public FireStationDaoImpl(List<FireStation> fireStations) {
+		log.debug("FireStationDaoImpl : constructeur");
+		if (fireStationData != null) {
+			fireStationData.clear();
+		}
+		for (FireStation fireStation : fireStations) {
+			fireStationData.add(fireStation);
+		}
 	}
 
 	// Liste des FireStation
@@ -70,7 +73,6 @@ public class FireStationDaoImpl implements FireStationDao {
 	public List<FireStation> deleteFireStationStation(FireStation fireStation) {
 		log.debug("FireStationDao deleteFireStationStation");
 		List<FireStation> fireStationResponse = new ArrayList<FireStation>();
-		log.info("dPersonDao eletePerson : delete a person");
 		Iterator<FireStation> i = fireStationData.iterator();
 		while (i.hasNext()) {
 			FireStation o = i.next();
@@ -90,7 +92,6 @@ public class FireStationDaoImpl implements FireStationDao {
 	public List<FireStation> deleteFireStationAddress(FireStation fireStation) {
 		log.debug("FireStationDao deleteFireStationAddress");
 		List<FireStation> fireStationResponse = new ArrayList<FireStation>();
-		log.info("dPersonDao eletePerson : delete a person");
 		Iterator<FireStation> i = fireStationData.iterator();
 		while (i.hasNext()) {
 			FireStation o = i.next();
@@ -105,17 +106,6 @@ public class FireStationDaoImpl implements FireStationDao {
 		return fireStationResponse;
 	}
 
-	// suppression de toutes les FireStation
-	@Override
-	public boolean deleteAll() {
-		log.debug("deleteAll : delete all FireStation");
-		if (fireStationData != null) {
-			fireStationData.clear();
-			System.out.println("** FireStationDaoImpl / clear de fireStationData : " + fireStationData.size());
-		}
-		return true;
-	}
-	
 	// recherche par adresse, rend 1 station, la première si doublon
 	@Override
 	public FireStation searchByAddress(String address) {
@@ -130,7 +120,7 @@ public class FireStationDaoImpl implements FireStationDao {
 		}
 		return isFound == true ? fireStation : null;
 	}
-	
+
 	// Recherche des adresses d'une station, on dedoublonne
 	@Override
 	public List<String> searchByStation(String station) {
@@ -138,11 +128,11 @@ public class FireStationDaoImpl implements FireStationDao {
 		List<String> stations = new ArrayList<>();
 		Set<String> setSt = new HashSet<>();
 		for (FireStation fs : fireStationData) {
-			if(fs.getStation().equals(station)) {
+			if (fs.getStation().equals(station)) {
 				setSt.add(fs.getAddress());
 			}
 		}
-		if(setSt.size() >0) {
+		if (setSt.size() > 0) {
 			stations = setSt.stream().collect(Collectors.toList());
 		}
 		return stations;

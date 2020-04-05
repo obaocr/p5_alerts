@@ -111,7 +111,7 @@
 
 	<reporting>
 		<plugins>
-			<!-- Pour generer le rapport spotbug -->
+			<!-- Reporting SPOTBUG -->
 			<plugin>
 				<groupId>com.github.spotbugs</groupId>
 				<artifactId>spotbugs-maven-plugin</artifactId>

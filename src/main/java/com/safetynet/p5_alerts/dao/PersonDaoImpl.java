@@ -22,16 +22,20 @@ import ch.qos.logback.classic.Logger;
 @Repository
 public class PersonDaoImpl implements PersonDao {
 
-	private static List<Person> personData;
+	private static List<Person> personData = new ArrayList<>();;
 
 	Logger log = (Logger) LoggerFactory.getLogger(PersonDaoImpl.class);
 
 	public PersonDaoImpl() {
-
 	}
 
-	public void setPersons(List<Person> persons) {
-		this.personData = persons;
+	public PersonDaoImpl(List<Person> persons) {
+		if (personData != null) {
+			personData.clear();
+		}
+		for (Person person : persons) {
+			personData.add(person);
+		}
 	}
 
 	// Retourne toutes les personnes
@@ -99,8 +103,7 @@ public class PersonDaoImpl implements PersonDao {
 		int pos = 0;
 		boolean isFound = false;
 		for (Person p : personData) {
-			if (p.getFirstname().equals(person.getFirstname())
-					&& p.getLastname().equals(person.getLastname())) {
+			if (p.getFirstname().equals(person.getFirstname()) && p.getLastname().equals(person.getLastname())) {
 				personData.set(pos, person);
 				isFound = true;
 			}
@@ -117,8 +120,7 @@ public class PersonDaoImpl implements PersonDao {
 		Iterator<Person> i = personData.iterator();
 		while (i.hasNext()) {
 			Person o = i.next();
-			if (o.getFirstname().equals(person.getFirstname())
-					&& o.getLastname().equals(person.getLastname())) {
+			if (o.getFirstname().equals(person.getFirstname()) && o.getLastname().equals(person.getLastname())) {
 				i.remove();
 				isFound = true;
 			}
@@ -126,14 +128,4 @@ public class PersonDaoImpl implements PersonDao {
 		return isFound;
 	}
 
-	// Suppression de toutes les personnes
-	@Override
-	public boolean deleteAll() {
-		log.debug("PersonDao deleteAll : delete all person");
-		if (personData != null) {
-			personData.clear();
-		}
-		;
-		return true;
-	}
 }

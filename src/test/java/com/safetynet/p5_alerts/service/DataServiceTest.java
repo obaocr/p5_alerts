@@ -17,11 +17,13 @@ class DataServiceTest {
 
 	@Test
 	void loadDataPersonTest() throws IOException {
-		DataService dataService = new DataServiceImpl("data_test.json");
-		dataService.loadData();
 		PersonDao personDao = new PersonDaoImpl();
 		FireStationDao fireStationDao = new FireStationDaoImpl();
 		MedicalRecordDao medialRecordDao = new MedicalRecordDaoImpl();
+		
+		DataService dataService = new DataServiceImpl("data_test.json");
+		dataService.loadData();
+		
 		int nbPersons = personDao.getAll().size();
 		int nbFirestations = fireStationDao.getAll().size();
 		int nbMedicalrecords = medialRecordDao.getAll().size();

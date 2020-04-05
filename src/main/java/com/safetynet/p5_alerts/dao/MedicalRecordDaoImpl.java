@@ -1,5 +1,6 @@
 package com.safetynet.p5_alerts.dao;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,18 +17,21 @@ import ch.qos.logback.classic.Logger;
  */
 @Repository
 public class MedicalRecordDaoImpl implements MedicalRecordDao {
-	
-	private static List<MedicalRecord> medicalRecordData;
+
+	private static List<MedicalRecord> medicalRecordData = new ArrayList<>();
 	Logger log = (Logger) LoggerFactory.getLogger(MedicalRecordDaoImpl.class);
-	
+
 	public MedicalRecordDaoImpl() {
-		
 	}
-	
-	@Override
-	public void setMedicalRecords(List<MedicalRecord> medicalRecords) {
+
+	public MedicalRecordDaoImpl(List<MedicalRecord> medicalRecords) {
 		log.debug("MedicalRecordDao setMedicalRecords");
-		this.medicalRecordData = medicalRecords;
+		if (medicalRecordData != null) {
+			medicalRecordData.clear();
+		}
+		for (MedicalRecord medicalRecord : medicalRecords) {
+			medicalRecordData.add(medicalRecord);
+		}
 	}
 
 	@Override
@@ -35,7 +39,7 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
 		log.debug("MedicalRecordDao getAll");
 		return medicalRecordData;
 	}
-	
+
 	// Recherche par prenom, nom
 	@Override
 	public MedicalRecord searchByName(String firstName, String lastName) {
@@ -61,7 +65,8 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
 		int pos = 0;
 		boolean isFound = false;
 		for (MedicalRecord mr : medicalRecordData) {
-			if (mr.getFirstname().equals(medicalRecord.getFirstname()) && mr.getLastname().equals(medicalRecord.getLastname())) {
+			if (mr.getFirstname().equals(medicalRecord.getFirstname())
+					&& mr.getLastname().equals(medicalRecord.getLastname())) {
 				medicalRecordData.set(pos, medicalRecord);
 				isFound = true;
 			}
@@ -83,15 +88,6 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
 			}
 		}
 		return isFound;
-	}
-
-	@Override
-	public boolean deleteAll() {
-		log.debug("MedicalRecordDao deleteAll");
-		if (medicalRecordData != null) {
-			medicalRecordData.clear();
-		}
-		return true;
 	}
 
 }

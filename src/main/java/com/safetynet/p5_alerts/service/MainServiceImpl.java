@@ -73,8 +73,8 @@ public class MainServiceImpl implements MainService {
 					personInfo.setFirstname(psn.getFirstname());
 					personInfo.setLastname(psn.getLastname());
 					personInfo.setAge(age);
-					personInfo.setEmail(psn.getEmail().toString());
-					personInfo.setAddress(psn.getAddress().toString());
+					personInfo.setEmail(psn.getEmail());
+					personInfo.setAddress(psn.getAddress());
 					personInfo.setAllergies(mr.getAllergies());
 					personInfo.setMedications(mr.getMedications());
 					personInfos.add(personInfo);

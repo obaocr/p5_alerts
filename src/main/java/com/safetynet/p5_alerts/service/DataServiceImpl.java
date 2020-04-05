@@ -36,9 +36,9 @@ public class DataServiceImpl implements DataService {
 	@Value("${custom.filename}")
 	private String filename;
 
-	private static List<Person> persons = new ArrayList<>();
-	private static List<FireStation> firestations = new ArrayList<>();
-	private static List<MedicalRecord> medicalrecords = new ArrayList<>();
+	private List<Person> persons = new ArrayList<>();
+	private List<FireStation> firestations = new ArrayList<>();
+	private List<MedicalRecord> medicalrecords = new ArrayList<>();
 	private String dataRessourceName;
 
 	private PersonDao personDao;
@@ -98,6 +98,9 @@ public class DataServiceImpl implements DataService {
 	@Override
 	public void loadData() throws IOException {
 		try {
+			firestations.clear();
+			persons.clear();
+			medicalrecords.clear();
 			log.debug("DataServiceImpl : loadPerson");
 			String pathFile = filename;
 			if (filename == null) {
@@ -119,16 +122,16 @@ public class DataServiceImpl implements DataService {
 			inputData.setPersons(persons);
 			inputData.setFireStations(firestations);
 			inputData.setMedicalRecords(medicalrecords);
-			personDao = new PersonDaoImpl();
-			personDao.setPersons(inputData.getPersons());
-			fireStationDao = new FireStationDaoImpl();
-			fireStationDao.setFireStations(inputData.getFireStation());
-			medicalRecordDao = new MedicalRecordDaoImpl();
-			medicalRecordDao.setMedicalRecords(inputData.getMedicalRecords());
+			personDao = new PersonDaoImpl(inputData.getPersons());
+ 			fireStationDao = new FireStationDaoImpl(inputData.getFireStation());
+			medicalRecordDao = new MedicalRecordDaoImpl(inputData.getMedicalRecords());
 			//
 			String logchgt = "loadData / persons:" + persons.size() + " / firestations:" + firestations.size()
 					+ " / medicalrecords:" + medicalrecords.size();
+			String logchgtDao = "loadData / personDao:" + personDao.getAll().size() + " / fireStationDao:" + fireStationDao.getAll().size()
+			+ " / medicalRecordDao:" + medicalRecordDao.getAll().size();
 			log.info(logchgt);
+			log.info(logchgtDao);
 		} catch (IOException e) {
 			log.error("DataServiceImpl Error loading loadData", e);
 			throw e;

@@ -24,12 +24,6 @@ class MedicalRecordServiceTest {
 	@Autowired
 	private MedicalRecordService medicalRecordService;
 
-	@BeforeAll
-	private static void initData() {
-		// On ne fait rien, le command line runner est demarré apres le @BeforeAll et
-		// charge les donnnées
-	}
-
 	@Test
 	void getAllTest() {
 		int nbItem = medicalRecordService.getMedicalRecords().size();

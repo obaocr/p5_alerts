@@ -21,14 +21,10 @@ class FireStationServiceTest {
 	@Autowired
 	private FireStationService fireStationService;
 
-	@BeforeAll
-	private static void initData() {
-		// On ne fait rien, le command line runner est demarré apres le @BeforeAll et charge les donnnées
-	}
-
 	@Test
 	void getAllTest() {
 		int nbItem = fireStationService.getFireStations().size();
+		System.out.println("FireStationServiceTest getAllTest;"+ fireStationService.getFireStations().size());
 		assertTrue(nbItem > 1);
 	}
 

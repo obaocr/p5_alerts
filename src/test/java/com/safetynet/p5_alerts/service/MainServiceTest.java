@@ -64,10 +64,6 @@ class MainServiceTest {
 	
 	@BeforeEach
 	private void initData() throws IOException {
-		// Before Each car le Before All est exécuté avant le conetxte spring et donc avant le commandLineRunner
-		personDao.deleteAll();
-		fireStationDao.deleteAll();
-		medicalRecordDao.deleteAll();
 		dataService.loadData();
 	}
 
@@ -156,13 +152,17 @@ class MainServiceTest {
 
 	@Test
 	void firestationTest() {
+		System.out.println("debut test firestationTest");
 		FirestationPerson firestationPerson;
 		firestationPerson = mainService.firestation("3");
+		System.out.println("personDao:"+personDao.getAll().size());
+		System.out.println("fireStationDao:"+fireStationDao.getAll().size());
+		System.out.println("firestationPerson.getNbOfAdult():"+firestationPerson.getNbOfAdult());
 		assertTrue(firestationPerson.getNbOfAdult() == 10);
 		assertTrue(firestationPerson.getNbOfChildren() == 3);
 		assertTrue(firestationPerson.getPersonForFirestations().size() == 13);
 	}
-
+	
 	@Test
 	void phoneAlertTest() {
 		PhoneAlert phoneAlert = mainService.phoneAlert("3");

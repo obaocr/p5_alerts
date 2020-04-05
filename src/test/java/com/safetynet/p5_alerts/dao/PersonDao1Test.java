@@ -2,39 +2,40 @@ package com.safetynet.p5_alerts.dao;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.safetynet.p5_alerts.model.CommunityEmail;
 import com.safetynet.p5_alerts.model.Person;
 import com.safetynet.p5_alerts.model.PersonForAPIDelete;
-import com.safetynet.p5_alerts.service.DataService;
 
-@SpringBootTest
-class PersonDaoTestIT {
-
-	@Autowired
-	private DataService dataService;
-
-	@Autowired
-	private PersonDao personDao;
-
+// Unit tests / no input data
+class PersonDao1Test {
+	
+	PersonDao personDao;
+	List<Person> persons = new ArrayList<>();
+	
 	@BeforeEach
-	private void initData() throws IOException {
-		// Before Each car le Before All est exécuté avant le conetxte spring et donc avant le commandLineRunner
-		personDao.deleteAll();
-		dataService.loadData();
+	private void init() {
+		personDao = new PersonDaoImpl(persons);
 	}
-
+	
 	@Test
 	void getAllTest() {
+		Person person = new Person();
+		person.setFirstname("Maria");
+		person.setLastname("Martinez");
+		person.setAddress("address");
+		person.setCity("Versailles");
+		person.setZip("zip");
+		person.setPhone("phone");
+		person.setEmail("email");
+		personDao.addPerson(person);
 		int nbPersons = personDao.getAll().size();
-		assertTrue(nbPersons > 1);
+		assertTrue(nbPersons == 1);
 	}
 
 	@Test
@@ -58,7 +59,7 @@ class PersonDaoTestIT {
 				.setCity("Montelimar").setZip("zip").setPhone("phone").setEmail("email").build();
 		personDao.addPerson(p);
 		int nbPersons2 = personDao.getAll().size();
-		List<Person> persons = personDao.searchByAddress("15 rue des olivier");
+		persons = personDao.searchByAddress("15 rue des olivier");
 		assertTrue(nbPersons + 1 == nbPersons2);
 		assertTrue(persons.size() > 0);
 	}
@@ -66,9 +67,13 @@ class PersonDaoTestIT {
 	@Test
 	// Test de la recherche des emails des personnes d'une ville inexistante
 	void communityEmailEmptyTest() {
+		Person.Builder personlBuilder = new Person.Builder();
+		Person p = personlBuilder.setFirstname("Alex").setLastname("Martinez").setAddress("15 rue des olivier")
+				.setCity("Montelimar").setZip("zip").setPhone("phone").setEmail("email").build();
+		personDao.addPerson(p);
 		CommunityEmail communityEmail;
-		communityEmail = personDao.getCommunityEmails("Culver");
-		assertTrue(communityEmail.getEmails().size() > 0);
+		communityEmail = personDao.getCommunityEmails("Montelimar");
+		assertTrue(communityEmail.getEmails().size() == 1);
 	}
 
 	@Test
@@ -96,7 +101,7 @@ class PersonDaoTestIT {
 		p.setCity("Paris");
 		personDao.updatePerson(p);
 		// On recherche cette personne
-		List<Person> persons = personDao.getAll();
+		persons = personDao.getAll();
 		for (Person psn : persons) {
 			if (psn.getFirstname().equals("Olivier") && psn.getLastname().equals("Martin")
 					&& psn.getCity().equals("Paris")) {
@@ -122,7 +127,6 @@ class PersonDaoTestIT {
 		personDao.deletePerson(personForAPIDelete);
 		assertTrue(nbPersons2 == nbPersons1 + 1);
 		assertTrue(nbPersons1 == personDao.getAll().size());
-
 	}
 
 }
