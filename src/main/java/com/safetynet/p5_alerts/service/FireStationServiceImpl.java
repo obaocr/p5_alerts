@@ -2,20 +2,19 @@ package com.safetynet.p5_alerts.service;
 
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.safetynet.p5_alerts.dao.FireStationDao;
 import com.safetynet.p5_alerts.model.FireStation;
 
-import ch.qos.logback.classic.Logger;
-
 @Service
 public class FireStationServiceImpl implements FireStationService {
-	
-	Logger log = (Logger) LoggerFactory.getLogger(MainServiceImpl.class);
-	
+
+	private static final Logger log = LogManager.getLogger(FireStationServiceImpl.class);
+
 	@Autowired
 	private FireStationDao fireStationDao;
 

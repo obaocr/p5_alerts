@@ -7,14 +7,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.safetynet.p5_alerts.model.CommunityEmail;
 import com.safetynet.p5_alerts.model.Person;
 import com.safetynet.p5_alerts.model.PersonForAPIDelete;
-
-import ch.qos.logback.classic.Logger;
 
 /**
  * PersonDao implementation
@@ -22,9 +21,8 @@ import ch.qos.logback.classic.Logger;
 @Repository
 public class PersonDaoImpl implements PersonDao {
 
+	private static final Logger log = LogManager.getLogger(PersonDaoImpl.class);
 	private static List<Person> personData = new ArrayList<>();;
-
-	Logger log = (Logger) LoggerFactory.getLogger(PersonDaoImpl.class);
 
 	public PersonDaoImpl() {
 	}

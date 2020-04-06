@@ -27,7 +27,7 @@ import com.safetynet.p5_alerts.service.MedicalRecordService;
 /*
  * Controller tests with MockMvc
  */
-public class MedicalRecordMvcMock {
+public class MedicalRecordMvcMockTest {
 	@Autowired
 	private MockMvc mockMvc;
 

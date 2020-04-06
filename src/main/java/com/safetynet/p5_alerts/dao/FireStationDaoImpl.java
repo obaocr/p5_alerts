@@ -7,21 +7,20 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.safetynet.p5_alerts.model.FireStation;
-
-import ch.qos.logback.classic.Logger;
 
 /**
  * FireStationDao implementation
  */
 @Repository
 public class FireStationDaoImpl implements FireStationDao {
-
+	
+	private static final Logger log = LogManager.getLogger(FireStationDaoImpl.class);
 	private static List<FireStation> fireStationData = new ArrayList<>();
-	Logger log = (Logger) LoggerFactory.getLogger(FireStationDaoImpl.class);
 
 	public FireStationDaoImpl() {
 	}

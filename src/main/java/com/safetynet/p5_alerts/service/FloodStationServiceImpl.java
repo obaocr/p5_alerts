@@ -6,7 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +22,10 @@ import com.safetynet.p5_alerts.model.PersonForFlood;
 import com.safetynet.p5_alerts.util.EntityNotFoundException;
 import com.safetynet.p5_alerts.util.Utils;
 
-import ch.qos.logback.classic.Logger;
-
 @Service
 public class FloodStationServiceImpl implements FloodStationService {
 
-	Logger log = (Logger) LoggerFactory.getLogger(MainServiceImpl.class);
+	private static final Logger log = LogManager.getLogger(FloodStationServiceImpl.class);
 
 	@Autowired
 	private MedicalRecordDao medicalRecordDao;

@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -28,11 +29,11 @@ import com.safetynet.p5_alerts.model.FireStation;
 import com.safetynet.p5_alerts.model.MedicalRecord;
 import com.safetynet.p5_alerts.model.Person;
 
-import ch.qos.logback.classic.Logger;
-
 @Component
 public class DataServiceImpl implements DataService {
 
+	private static final Logger log = LogManager.getLogger(DataServiceImpl.class);
+	
 	@Value("${custom.filename}")
 	private String filename;
 
@@ -44,8 +45,6 @@ public class DataServiceImpl implements DataService {
 	private PersonDao personDao;
 	private FireStationDao fireStationDao;
 	private MedicalRecordDao medicalRecordDao;
-
-	Logger log = (Logger) LoggerFactory.getLogger(DataServiceImpl.class);
 
 	public DataServiceImpl(String dataRessourceName) {
 		this.dataRessourceName = dataRessourceName;

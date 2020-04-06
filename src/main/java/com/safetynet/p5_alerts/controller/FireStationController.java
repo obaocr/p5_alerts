@@ -2,7 +2,8 @@ package com.safetynet.p5_alerts.controller;
 
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,14 +16,13 @@ import com.safetynet.p5_alerts.model.FireStation;
 import com.safetynet.p5_alerts.service.FireStationService;
 import com.safetynet.p5_alerts.util.EntityIllegalArgumentException;
 
-import ch.qos.logback.classic.Logger;
-
 /**
  * Controller for FireStation object
  */
 @RestController
 public class FireStationController {
-	Logger log = (Logger) LoggerFactory.getLogger(FireStationController.class);
+
+	private static final Logger log = LogManager.getLogger(FireStationController.class);
 
 	@Autowired
 	private FireStationService fireStationService;
@@ -34,11 +34,11 @@ public class FireStationController {
 	}
 
 	private void checkInput(FireStation fireStation) {
-		if(fireStation == null || fireStation.getAddress().isEmpty() || fireStation.getStation().isEmpty()) {
+		if (fireStation == null || fireStation.getAddress().isEmpty() || fireStation.getStation().isEmpty()) {
 			throw new EntityIllegalArgumentException("Address and Station are mandatory");
 		}
 	}
-	
+
 	@PostMapping(value = "firestation")
 	public boolean addFireStation(@RequestBody FireStation fireStation) {
 		log.debug("Create a firestation");

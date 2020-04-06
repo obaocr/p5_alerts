@@ -2,7 +2,8 @@ package com.safetynet.p5_alerts.controller;
 
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,15 +17,13 @@ import com.safetynet.p5_alerts.model.PersonForAPIDelete;
 import com.safetynet.p5_alerts.service.PersonService;
 import com.safetynet.p5_alerts.util.EntityIllegalArgumentException;
 
-import ch.qos.logback.classic.Logger;
-
 /**
  * Controller for Person object
  */
 @RestController
 public class PersonController {
 
-	Logger log = (Logger) LoggerFactory.getLogger(PersonController.class);
+	private static final Logger log = LogManager.getLogger(PersonController.class);
 
 	@Autowired
 	private PersonService personService;
@@ -34,19 +33,19 @@ public class PersonController {
 		log.debug("persons/all : list of persons");
 		return personService.getPersons();
 	}
-	
+
 	private void checkInputPerson(Person person) {
-		if(person == null || person.getFirstname().isEmpty() || person.getLastname().isEmpty()) {
+		if (person == null || person.getFirstname().isEmpty() || person.getLastname().isEmpty()) {
 			throw new EntityIllegalArgumentException("Firstname and Lastname are mandatory");
 		}
 	}
-	
+
 	private void checkInputPersonForAPIDelete(PersonForAPIDelete person) {
-		if(person == null || person.getFirstname().isEmpty() || person.getLastname().isEmpty()) {
+		if (person == null || person.getFirstname().isEmpty() || person.getLastname().isEmpty()) {
 			throw new EntityIllegalArgumentException("Firstname and Lastname are mandatory");
 		}
 	}
-	
+
 	@PostMapping(value = "person")
 	public boolean addPerson(@RequestBody Person person) {
 		log.debug("Create a person");

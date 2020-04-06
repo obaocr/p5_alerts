@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.safetynet.p5_alerts.model.MedicalRecord;
 import com.safetynet.p5_alerts.model.PersonForAPIDelete;
-
-import ch.qos.logback.classic.Logger;
 
 /**
  * PersonDao implementation
@@ -18,8 +17,8 @@ import ch.qos.logback.classic.Logger;
 @Repository
 public class MedicalRecordDaoImpl implements MedicalRecordDao {
 
+	private static final Logger log = LogManager.getLogger(MedicalRecordDaoImpl.class);
 	private static List<MedicalRecord> medicalRecordData = new ArrayList<>();
-	Logger log = (Logger) LoggerFactory.getLogger(MedicalRecordDaoImpl.class);
 
 	public MedicalRecordDaoImpl() {
 	}

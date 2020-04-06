@@ -6,16 +6,15 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.util.Date;
 
-import org.slf4j.LoggerFactory;
-
-import ch.qos.logback.classic.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Class to calculateAge
  */
 public class Utils {
 	
-	static Logger log = (Logger) LoggerFactory.getLogger(Utils.class);
+	private static final Logger log = LogManager.getLogger(Utils.class);
 	
 	public static int calculateAgeFromBirthDate(Date birthDate) {
 		

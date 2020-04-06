@@ -2,7 +2,8 @@ package com.safetynet.p5_alerts.controller;
 
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,14 +20,12 @@ import com.safetynet.p5_alerts.service.FloodStationService;
 import com.safetynet.p5_alerts.service.MainService;
 import com.safetynet.p5_alerts.util.EntityIllegalArgumentException;
 
-import ch.qos.logback.classic.Logger;
-
 /**
  * Controller for API Business
  */
 @RestController
 public class MainController {
-	Logger log = (Logger) LoggerFactory.getLogger(MainController.class);
+	private static final Logger log = LogManager.getLogger(MainController.class);
 
 	@Autowired
 	private MainService mainService;
@@ -39,7 +38,7 @@ public class MainController {
 		log.debug("communityEmail : String city is empty");
 		if (city.isEmpty()) {
 			log.error("communityEmail : list persons emails for a city");
-			throw new IllegalArgumentException();
+			throw new EntityIllegalArgumentException("The parameter city must be set");
 		}
 		return mainService.getCommunityEmails(city);
 	}
