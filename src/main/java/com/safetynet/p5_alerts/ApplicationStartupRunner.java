@@ -5,7 +5,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import com.safetynet.p5_alerts.service.DataService;
-
+/**
+ * 
+ * CommandLineRunner to load data
+ *
+ */
 @Component
 public class ApplicationStartupRunner implements CommandLineRunner {
 

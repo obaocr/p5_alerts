@@ -69,13 +69,13 @@ public class FireStationDaoImpl implements FireStationDao {
 
 	// suppression FireStation d'une station / station
 	@Override
-	public List<FireStation> deleteFireStationStation(FireStation fireStation) {
+	public List<FireStation> deleteFireStationStation(String station) {
 		log.debug("FireStationDao deleteFireStationStation");
 		List<FireStation> fireStationResponse = new ArrayList<FireStation>();
 		Iterator<FireStation> i = fireStationData.iterator();
 		while (i.hasNext()) {
 			FireStation o = i.next();
-			if (o.getStation().equals(fireStation.getStation())) {
+			if (o.getStation().equals(station)) {
 				FireStation fs = new FireStation();
 				fs.setStation(o.getStation());
 				fs.setAddress(o.getAddress());
@@ -88,13 +88,13 @@ public class FireStationDaoImpl implements FireStationDao {
 
 	// suppression FireStation d'une station / adresse
 	@Override
-	public List<FireStation> deleteFireStationAddress(FireStation fireStation) {
+	public List<FireStation> deleteFireStationAddress(String address) {
 		log.debug("FireStationDao deleteFireStationAddress");
 		List<FireStation> fireStationResponse = new ArrayList<FireStation>();
 		Iterator<FireStation> i = fireStationData.iterator();
 		while (i.hasNext()) {
 			FireStation o = i.next();
-			if (o.getAddress().equals(fireStation.getAddress())) {
+			if (o.getAddress().equals(address)) {
 				FireStation fs = new FireStation();
 				fs.setStation(o.getStation());
 				fs.setAddress(o.getAddress());

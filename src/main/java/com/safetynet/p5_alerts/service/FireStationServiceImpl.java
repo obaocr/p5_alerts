@@ -9,7 +9,11 @@ import org.springframework.stereotype.Service;
 
 import com.safetynet.p5_alerts.dao.FireStationDao;
 import com.safetynet.p5_alerts.model.FireStation;
-
+/**
+ * 
+ * FireStationService implementation
+ *
+ */
 @Service
 public class FireStationServiceImpl implements FireStationService {
 
@@ -37,15 +41,15 @@ public class FireStationServiceImpl implements FireStationService {
 	}
 
 	@Override
-	public List<FireStation> deleteFireStationbyStation(FireStation fireStation) {
+	public List<FireStation> deleteFireStationbyStation(String station) {
 		log.debug("FireStationServiceImpl : deleteFireStationbyStation");
-		return fireStationDao.deleteFireStationStation(fireStation);
+		return fireStationDao.deleteFireStationStation(station);
 	}
 
 	@Override
-	public List<FireStation> deleteFireStationbyAddress(FireStation fireStation) {
+	public List<FireStation> deleteFireStationbyAddress(String address) {
 		log.debug("FireStationServiceImpl : deleteFireStationbyAddress");
-		return fireStationDao.deleteFireStationAddress(fireStation);
+		return fireStationDao.deleteFireStationAddress(address);
 	}
 
 }

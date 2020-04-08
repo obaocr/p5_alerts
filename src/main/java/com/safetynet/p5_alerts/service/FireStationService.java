@@ -11,6 +11,6 @@ public interface FireStationService {
 	public List<FireStation> getFireStations();
 	public boolean addFireStation(FireStation fireStation);
 	public boolean updateFireStation(FireStation fireStation);
-	public List<FireStation> deleteFireStationbyStation(FireStation fireStation);
-	public List<FireStation> deleteFireStationbyAddress(FireStation fireStation);
+	public List<FireStation> deleteFireStationbyStation(String station);
+	public List<FireStation> deleteFireStationbyAddress(String address);
 }

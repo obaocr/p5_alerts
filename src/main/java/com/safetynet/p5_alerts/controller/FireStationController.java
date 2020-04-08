@@ -1,5 +1,6 @@
 package com.safetynet.p5_alerts.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.safetynet.p5_alerts.model.DeleteResponseController;
 import com.safetynet.p5_alerts.model.FireStation;
 import com.safetynet.p5_alerts.service.FireStationService;
 import com.safetynet.p5_alerts.util.EntityIllegalArgumentException;
@@ -35,6 +37,7 @@ public class FireStationController {
 
 	private void checkInput(FireStation fireStation) {
 		if (fireStation == null || fireStation.getAddress().isEmpty() || fireStation.getStation().isEmpty()) {
+			log.error("Address and Station are mandatory");
 			throw new EntityIllegalArgumentException("Address and Station are mandatory");
 		}
 	}
@@ -54,17 +57,23 @@ public class FireStationController {
 	}
 
 	@DeleteMapping(value = "firestation")
-	public List<FireStation> deleteFireStation(@RequestBody FireStation fireStation) {
+	public DeleteResponseController deleteFireStation(@RequestBody FireStation fireStation) {
 		log.debug("Detete a firestation");
-		checkInput(fireStation);
+		List<FireStation> fireStations = new ArrayList<>();
+		if (fireStation == null || (fireStation.getAddress().isEmpty() && fireStation.getStation().isEmpty())) {
+			log.error("Address OR Station are mandatory");
+			throw new EntityIllegalArgumentException("Address OR Station are mandatory");
+		}
 		if (!fireStation.getAddress().isEmpty()) {
-			return fireStationService.deleteFireStationbyAddress(fireStation);
+			fireStations =  fireStationService.deleteFireStationbyAddress(fireStation.getAddress());
 		} else {
 			if (!fireStation.getStation().isEmpty()) {
-				return fireStationService.deleteFireStationbyStation(fireStation);
+				fireStations =  fireStationService.deleteFireStationbyStation(fireStation.getStation());
 			}
 		}
-		return null;
+		DeleteResponseController deleteResponseController = new DeleteResponseController();
+		deleteResponseController.setNbOfItemDeleted(fireStations.size());
+		return deleteResponseController;
 	}
 
 }

@@ -11,8 +11,8 @@ public interface FireStationDao {
 	public List<FireStation> getAll();
 	public boolean addFireStation(FireStation fireStation);
 	public boolean updateFireStation(FireStation fireStation);
-	public List<FireStation> deleteFireStationStation(FireStation fireStation);
-	public List<FireStation> deleteFireStationAddress(FireStation fireStation);
+	public List<FireStation> deleteFireStationStation(String station);
+	public List<FireStation> deleteFireStationAddress(String address);
 	public FireStation searchByAddress(String address);
 	public List<String> searchByStation(String station);
 

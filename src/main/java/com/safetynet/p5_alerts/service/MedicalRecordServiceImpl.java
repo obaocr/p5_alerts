@@ -11,7 +11,11 @@ import com.safetynet.p5_alerts.dao.MedicalRecordDao;
 import com.safetynet.p5_alerts.model.MedicalRecord;
 import com.safetynet.p5_alerts.model.PersonForAPIDelete;
 
-
+/**
+ * 
+ * MedicalRecordService implementation
+ *
+ */
 @Service
 public class MedicalRecordServiceImpl implements MedicalRecordService {
 

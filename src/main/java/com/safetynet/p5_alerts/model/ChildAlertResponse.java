@@ -2,8 +2,10 @@ package com.safetynet.p5_alerts.model;
 
 import java.util.List;
 
-/*
+/**
+ * 
  * Model ChildAlertResponse
+ *
  */
 public class ChildAlertResponse {
 	private List<ChildAlert> childAlerts;

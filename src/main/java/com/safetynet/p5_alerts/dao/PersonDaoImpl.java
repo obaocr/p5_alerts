@@ -22,7 +22,7 @@ import com.safetynet.p5_alerts.model.PersonForAPIDelete;
 public class PersonDaoImpl implements PersonDao {
 
 	private static final Logger log = LogManager.getLogger(PersonDaoImpl.class);
-	private static List<Person> personData = new ArrayList<>();;
+	private static List<Person> personData = new ArrayList<>();
 
 	public PersonDaoImpl() {
 	}

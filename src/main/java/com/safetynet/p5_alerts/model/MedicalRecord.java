@@ -3,7 +3,7 @@ package com.safetynet.p5_alerts.model;
 import java.util.Date;
 import java.util.List;
 
-/*
+/**
  * Model MedicalRecord
  */
 public class MedicalRecord {

@@ -2,7 +2,7 @@ package com.safetynet.p5_alerts.model;
 
 import java.util.List;
 
-/*
+/**
  * Model HouseholdResponse
  */
 public class HouseholdResponse {

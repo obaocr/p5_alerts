@@ -1,0 +1,25 @@
+2020-04-08 17:54:07,235 INFO o.s.b.StartupInfoLogger [main] Starting P5AlertsApplication on PO480126VW7JAV with PID 6740 (C:\Users\S063912\git\p5_alerts\target\classes started by s063912 in C:\Users\S063912\git\p5_alerts)
+2020-04-08 17:54:07,245 INFO o.s.b.SpringApplication [main] No active profile set, falling back to default profiles: default
+2020-04-08 17:54:08,682 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat initialized with port(s): 8045 (http)
+2020-04-08 17:54:08,702 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8045"]
+2020-04-08 17:54:08,703 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2020-04-08 17:54:08,704 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/9.0.31]
+2020-04-08 17:54:08,828 INFO o.a.j.l.DirectJDKLog [main] Initializing Spring embedded WebApplicationContext
+2020-04-08 17:54:08,828 INFO o.s.b.w.s.c.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 1286 ms
+2020-04-08 17:54:09,260 INFO o.s.s.c.ExecutorConfigurationSupport [main] Initializing ExecutorService 'applicationTaskExecutor'
+2020-04-08 17:54:09,610 WARN o.s.b.a.g.t.GroovyTemplateAutoConfiguration$GroovyMarkupConfiguration [main] Cannot find template location: classpath:/templates/ (please add some templates, check your Groovy configuration, or set spring.groovy.template.check-template-location=false)
+2020-04-08 17:54:10,173 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8045"]
+2020-04-08 17:54:10,231 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat started on port(s): 8045 (http) with context path ''
+2020-04-08 17:54:10,322 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat initialized with port(s): 8046 (http)
+2020-04-08 17:54:10,323 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8046"]
+2020-04-08 17:54:10,323 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2020-04-08 17:54:10,323 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/9.0.31]
+2020-04-08 17:54:10,353 INFO o.a.j.l.DirectJDKLog [main] Initializing Spring embedded WebApplicationContext
+2020-04-08 17:54:10,354 INFO o.s.b.w.s.c.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 119 ms
+2020-04-08 17:54:10,367 INFO o.s.b.a.e.w.EndpointLinksResolver [main] Exposing 14 endpoint(s) beneath base path '/actuator'
+2020-04-08 17:54:10,421 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8046"]
+2020-04-08 17:54:10,428 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat started on port(s): 8046 (http) with context path ''
+2020-04-08 17:54:10,431 INFO o.s.b.StartupInfoLogger [main] Started P5AlertsApplication in 3.584 seconds (JVM running for 5.015)
+2020-04-08 17:54:10,436 INFO c.s.p.s.DataServiceImpl [main] loadData : debut / this.dataRessourceName / filename /  pathFile : null/data.json/data.json
+2020-04-08 17:54:10,499 INFO c.s.p.s.DataServiceImpl [main] loadData / persons:23 / firestations:13 / medicalrecords:23
+2020-04-08 17:54:10,499 INFO c.s.p.s.DataServiceImpl [main] loadData / personDao:23 / fireStationDao:13 / medicalRecordDao:23

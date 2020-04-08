@@ -1,62 +1,112 @@
 package com.safetynet.p5_alerts.controller;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 /*
- * Controllers tests end/end without mock
- * Test file for input Data
+ * Controller tests with MockMvc
  */
-class MainControllerTest {
+public class MainControllerTest {
 
 	@Autowired
-	private MainController mainController;
+	private MockMvc mockMvc;
 
 	@Test
-	public void getCommunityEmailsShouldReturnEmails() throws Exception {
-		assertTrue(mainController.getCommunityEmails("Culver").getEmails().size() > 0);
+	void getCommunityEmailsShouldReturnEmails() throws Exception {
+		this.mockMvc.perform(get("/communityEmail").param("city", "Culver").characterEncoding("utf-8")).andDo(print())
+				.andExpect(status().isOk()).andReturn();
 	}
 
 	@Test
-	public void personInfoShouldReturnpersonInfos() throws Exception {
-		assertTrue(mainController.personInfo("Boyd","John").getPersonInfos().size() > 0);
-	}
-	
-	@Test
-	public void childAlertShouldReturnchildAlerts() throws Exception {
-		assertTrue(mainController.childAlert("1509 Culver St").getChildAlerts().size() > 0);
+	void getCommunityEmailsShouldReturnisNotFound() throws Exception {
+		this.mockMvc.perform(get("/communityEmail").param("city", "xxzz").characterEncoding("utf-8")).andDo(print())
+				.andExpect(status().isNotFound()).andReturn();
 	}
 
 	@Test
-	public void firestationPersonShouldReturnPersonForFirestations() throws Exception {
-		assertTrue(mainController.firestationPerson("3").getPersonForFirestations().size() > 0);
+	void getCommunityEmailsShouldReturnisBadRequest() throws Exception {
+		this.mockMvc.perform(get("/communityEmail")).andDo(print()).andExpect(status().isBadRequest()).andReturn();
 	}
 
 	@Test
-	public void phoneAlertPersonShouldReturnPhones() throws Exception {
-		assertTrue(mainController.phoneAlert("3").getPhones().size() > 0);
+	void childAlertShouldReturnchildAlerts() throws Exception {
+		this.mockMvc.perform(get("/childAlert").param("address", "1509 Culver St").characterEncoding("utf-8"))
+				.andDo(print()).andExpect(status().isOk()).andReturn();
 	}
 
 	@Test
-	public void fireShouldReturnPersonForFirestationAddress() throws Exception {
-		assertTrue(mainController.fire("1509 Culver St").getPersonForFirestationAddress().size() > 0);
+	void childAlertShouldReturnchildKO() throws Exception {
+		this.mockMvc.perform(get("/childAlert").param("address", "").characterEncoding("utf-8")).andDo(print())
+				.andExpect(status().isBadRequest()).andReturn();
 	}
 
 	@Test
-	public void floodStationsShouldReturnHouseholdResponse() throws Exception {
-		List<String> stations = new ArrayList<>();
-		stations.add("1");
-		stations.add("3");
-		assertTrue(mainController.floodStations(stations).getHouseholds().size() > 0);
+	void personInfoShouldReturnpersonInfos() throws Exception {
+		this.mockMvc.perform(
+				get("/personInfo").param("lastName", "Boyd").param("firstName", "John").characterEncoding("utf-8"))
+				.andDo(print()).andExpect(status().isOk()).andReturn();
 	}
 
+	@Test
+	void personInfoShouldReturnKO() throws Exception {
+		this.mockMvc.perform(get("/personInfo").param("lastName", "").param("firstName", "").characterEncoding("utf-8"))
+				.andDo(print()).andExpect(status().isBadRequest()).andReturn();
+	}
+
+	@Test
+	void firestationPersonShouldReturnPersonForFirestations() throws Exception {
+		this.mockMvc.perform(get("/firestation").param("stationNumber", "3").characterEncoding("utf-8")).andDo(print())
+				.andExpect(status().isOk()).andReturn();
+	}
+
+	@Test
+	void firestationPersonShouldReturnKO() throws Exception {
+		this.mockMvc.perform(get("/firestation").param("stationNumber", "").characterEncoding("utf-8")).andDo(print())
+				.andExpect(status().isBadRequest()).andReturn();
+	}
+
+	@Test
+	void phoneAlertPersonShouldReturnPhones() throws Exception {
+		this.mockMvc.perform(get("/phoneAlert").param("stationNumber", "3").characterEncoding("utf-8")).andDo(print())
+				.andExpect(status().isOk()).andReturn();
+	}
+
+	@Test
+	void phoneAlertPersonShouldReturnKO() throws Exception {
+		this.mockMvc.perform(get("/phoneAlert").param("stationNumber", "").characterEncoding("utf-8")).andDo(print())
+				.andExpect(status().isBadRequest()).andReturn();
+	}
+
+	@Test
+	void fireShouldReturnPersonForFirestationAddress() throws Exception {
+		this.mockMvc.perform(get("/fire").param("address", "1509 Culver St").characterEncoding("utf-8")).andDo(print())
+				.andExpect(status().isOk()).andReturn();
+	}
+
+	@Test
+	void fireShouldReturnKO() throws Exception {
+		this.mockMvc.perform(get("/fire").param("address", "").characterEncoding("utf-8")).andDo(print())
+				.andExpect(status().isBadRequest()).andReturn();
+	}
+
+	@Test
+	void floodStationsShouldReturnHouseholdResponse() throws Exception {
+		this.mockMvc.perform(get("/flood/stations").param("stations", "1,3").characterEncoding("utf-8")).andDo(print())
+				.andExpect(status().isOk()).andReturn();
+	}
+
+	@Test
+	void floodStationsShouldReturnKO() throws Exception {
+		this.mockMvc.perform(get("/flood/stations").param("stations", "").characterEncoding("utf-8")).andDo(print())
+				.andExpect(status().isBadRequest()).andReturn();
+	}
 }

@@ -35,12 +35,14 @@ public class MedicalRecordController {
 
 	private void checkInput(MedicalRecord medicalRecord) {
 		if (medicalRecord == null || medicalRecord.getFirstname().isEmpty() || medicalRecord.getLastname().isEmpty()) {
+			log.error("MedicalRecordController : Firstname and Lastname are mandatory");
 			throw new EntityIllegalArgumentException("Firstname and Lastname are mandatory");
 		}
 	}
 
 	private void checkInputPersonForAPIDelete(PersonForAPIDelete person) {
 		if (person == null || person.getFirstname().isEmpty() || person.getLastname().isEmpty()) {
+			log.error("MedicalRecordController : Firstname and Lastname are mandatory");
 			throw new EntityIllegalArgumentException("Firstname and Lastname are mandatory");
 		}
 	}

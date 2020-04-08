@@ -10,7 +10,11 @@ import org.springframework.stereotype.Service;
 import com.safetynet.p5_alerts.dao.PersonDao;
 import com.safetynet.p5_alerts.model.Person;
 import com.safetynet.p5_alerts.model.PersonForAPIDelete;
-
+/**
+ * 
+ * PersonService implementation
+ *
+ */
 @Service
 public class PersonServiceImpl implements PersonService {
 

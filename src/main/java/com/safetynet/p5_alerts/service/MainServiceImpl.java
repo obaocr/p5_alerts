@@ -2,6 +2,7 @@ package com.safetynet.p5_alerts.service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,17 +21,24 @@ import com.safetynet.p5_alerts.model.ChildAlertResponse;
 import com.safetynet.p5_alerts.model.CommunityEmail;
 import com.safetynet.p5_alerts.model.FireStation;
 import com.safetynet.p5_alerts.model.FirestationPerson;
+import com.safetynet.p5_alerts.model.Household;
+import com.safetynet.p5_alerts.model.HouseholdResponse;
 import com.safetynet.p5_alerts.model.MedicalRecord;
 import com.safetynet.p5_alerts.model.Person;
 import com.safetynet.p5_alerts.model.PersonForFirestation;
 import com.safetynet.p5_alerts.model.PersonForFirestationAddress;
 import com.safetynet.p5_alerts.model.PersonForFirestationAddressResponse;
+import com.safetynet.p5_alerts.model.PersonForFlood;
 import com.safetynet.p5_alerts.model.PersonInfo;
 import com.safetynet.p5_alerts.model.PersonInfoResponse;
 import com.safetynet.p5_alerts.model.PhoneAlert;
 import com.safetynet.p5_alerts.util.EntityNotFoundException;
 import com.safetynet.p5_alerts.util.Utils;
-
+/**
+ * 
+ * MainService implementation
+ *
+ */
 @Service
 public class MainServiceImpl implements MainService {
 
@@ -66,7 +74,6 @@ public class MainServiceImpl implements MainService {
 			for (MedicalRecord mr : medicalRecords) {
 				if (psn.getFirstname().equals(firstName) && psn.getLastname().equals(lastName)
 						&& mr.getFirstname().equals(firstName) && mr.getLastname().equals(lastName)) {
-					System.out.println("match !");
 					personInfo = new PersonInfo();
 					int age = Utils.calculateAgeFromBirthDate(mr.getBirthDate());
 					personInfo.setFirstname(psn.getFirstname());
@@ -81,6 +88,7 @@ public class MainServiceImpl implements MainService {
 			}
 		}
 		if (personInfos.isEmpty()) {
+			log.info("personInfo : No personInfo found for lastName/firstName");
 			throw new EntityNotFoundException("No personInfo found for lastName/firstName: " + lastName + "/"+firstName);
 		} else {
 			PersonInfoResponse.setPersonInfos(personInfos);
@@ -120,6 +128,7 @@ public class MainServiceImpl implements MainService {
 			}
 		}
 		if (childAlerts.isEmpty()) {
+			log.info("childAlert : No childAlert found for address");
 			throw new EntityNotFoundException("No childAlert found for address: " + address);
 		} else {
 			childAlertResponse.setChildAlerts(childAlerts);
@@ -174,6 +183,7 @@ public class MainServiceImpl implements MainService {
 			firestationPerson.setPersonForFirestations(personForFirestations);
 		}
 		if (!isStationFound) {
+			log.info("firestation : No FirestationPerson found for station");
 			throw new EntityNotFoundException("No FirestationPerson found for station: " + station);
 		} else {
 			return firestationPerson;
@@ -202,6 +212,7 @@ public class MainServiceImpl implements MainService {
 			phoneAlert.setPhones(phones);
 		}
 		if (setPhone.isEmpty()) {
+			log.info("phoneAlert : No FirestationPerson found for firestation_number");
 			throw new EntityNotFoundException("No FirestationPerson found for firestation_number: " + firestation_number);
 		} else {
 			return phoneAlert;
@@ -238,11 +249,84 @@ public class MainServiceImpl implements MainService {
 
 		}
 		if (lpersonForFirestationAddress.isEmpty()) {
+			log.info("fire : No PersonForFirestationAddressResponse found for address");
 			throw new EntityNotFoundException("No PersonForFirestationAddressResponse found for address: " + address);
 		} else {
 			personForFirestationAddressResponse.setPersonForFirestationAddress(lpersonForFirestationAddress);
 			return personForFirestationAddressResponse;
 		}
 	}
+	
+	//
+	// FloodStation
+	//
+	// Chargement dans une Set des adresses des stations (dedoublonées)
+		private Set<String> getAdressStations(List<String> stations) {
+			log.debug("FloodStationServiceImpl getAdressStations");
+			Set<String> setAddress = new HashSet<>();
+			for (String station : stations) {
+				List<String> address = fireStationDao.searchByStation(station);
+				for (String adr : address) {
+					setAddress.add(adr);
+				}
+			}
+			return setAddress;
+		}
+
+		private List<PersonForFlood> getpersonForFlood(List<Person> persons) {
+			log.debug("FloodStationServiceImpl getpersonForFlood");
+			List<PersonForFlood> personForFloods = new ArrayList<>();
+			PersonForFlood personForFlood;
+			MedicalRecord medicalRecord;
+			for (Person psn : persons) {
+				personForFlood = new PersonForFlood();
+				personForFlood.setFirstname(psn.getFirstname());
+				personForFlood.setLastname(psn.getLastname());
+				personForFlood.setPhone(psn.getPhone());
+				medicalRecord = medicalRecordDao.searchByName(psn.getFirstname(), psn.getLastname());
+				if (medicalRecord != null) {
+					personForFlood.setAge(Utils.calculateAgeFromBirthDate(medicalRecord.getBirthDate()));
+					personForFlood.setAllergies(medicalRecord.getAllergies());
+					personForFlood.setMedications(medicalRecord.getMedications());
+				}
+				personForFloods.add(personForFlood);
+			}
+			return personForFloods;
+		}
+
+		// Les foyers et personnes pour une liste de stations
+		@Override
+		public HouseholdResponse floodStations(List<String> stations) {
+			log.info("floodStations : Households & Persons infos for a firestations list");
+			HouseholdResponse householdResponse = new HouseholdResponse();
+			List<Household> households = new ArrayList<>();
+			Household household;
+			String address;
+
+			// On charge une Set des adresses des stations
+			Set<String> setAddress = getAdressStations(stations);
+
+			// On parcourt la Set des adresses
+			Iterator<String> adr = setAddress.iterator();
+			while (adr.hasNext()) {
+				address = adr.next();
+				List<Person> persons = personDao.searchByAddress(address);
+				if (persons != null && persons.size() > 0) {
+					household = new Household();
+					household.setAddress(address);
+					List<PersonForFlood> personForFloods = getpersonForFlood(persons);
+					household.setPersonForFloods(personForFloods);
+					households.add(household);
+				}
+			}
+			if (households.isEmpty()) {
+				log.info("floodStations : No households found for stations");
+				throw new EntityNotFoundException("No households found for stations: " + stations);
+			} else {
+				householdResponse.setHouseholds(households);
+				return householdResponse;
+			}
+
+		}
 
 }

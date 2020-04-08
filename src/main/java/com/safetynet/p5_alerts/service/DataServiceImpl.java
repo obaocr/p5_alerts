@@ -28,7 +28,11 @@ import com.safetynet.p5_alerts.model.Data;
 import com.safetynet.p5_alerts.model.FireStation;
 import com.safetynet.p5_alerts.model.MedicalRecord;
 import com.safetynet.p5_alerts.model.Person;
-
+/**
+ * 
+ * DataService to load data
+ *
+ */
 @Component
 public class DataServiceImpl implements DataService {
 

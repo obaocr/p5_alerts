@@ -36,12 +36,14 @@ public class PersonController {
 
 	private void checkInputPerson(Person person) {
 		if (person == null || person.getFirstname().isEmpty() || person.getLastname().isEmpty()) {
+			log.error("PersonController : Firstname and Lastname are mandatory");
 			throw new EntityIllegalArgumentException("Firstname and Lastname are mandatory");
 		}
 	}
 
 	private void checkInputPersonForAPIDelete(PersonForAPIDelete person) {
 		if (person == null || person.getFirstname().isEmpty() || person.getLastname().isEmpty()) {
+			log.error("PersonController : Firstname and Lastname are mandatory");
 			throw new EntityIllegalArgumentException("Firstname and Lastname are mandatory");
 		}
 	}
