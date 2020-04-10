@@ -1,5 +1,6 @@
 package com.safetynet.p5_alerts.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.safetynet.p5_alerts.model.DeleteResponseController;
 import com.safetynet.p5_alerts.model.MedicalRecord;
 import com.safetynet.p5_alerts.model.PersonForAPIDelete;
 import com.safetynet.p5_alerts.service.MedicalRecordService;
@@ -62,10 +64,14 @@ public class MedicalRecordController {
 	}
 
 	@DeleteMapping(value = "medicalrecord")
-	public boolean deleteMedicalRecord(@RequestBody PersonForAPIDelete person) {
+	public DeleteResponseController deleteMedicalRecord(@RequestBody PersonForAPIDelete person) {
 		log.debug("Detete a medicalrecord");
+		List<MedicalRecord> medicalRecords = new ArrayList<>();
 		checkInputPersonForAPIDelete(person);
-		return medicalRecordService.deleteMedicalRecord(person);
+		medicalRecords = medicalRecordService.deleteMedicalRecord(person);
+		DeleteResponseController deleteResponseController = new DeleteResponseController();
+		deleteResponseController.setNbOfItemDeleted(medicalRecords.size());
+		return deleteResponseController;
 	}
 
 }

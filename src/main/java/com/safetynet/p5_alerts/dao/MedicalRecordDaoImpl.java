@@ -75,18 +75,18 @@ public class MedicalRecordDaoImpl implements MedicalRecordDao {
 	}
 
 	@Override
-	public boolean deleteMedicalRecord(PersonForAPIDelete person) {
+	public List<MedicalRecord> deleteMedicalRecord(PersonForAPIDelete person) {
 		log.debug("MedicalRecordDao deleteMedicalRecord");
-		boolean isFound = false;
+		List<MedicalRecord> medicalRecords = new ArrayList<>();
 		Iterator<MedicalRecord> i = medicalRecordData.iterator();
 		while (i.hasNext()) {
 			MedicalRecord o = i.next();
 			if (o.getFirstname().equals(person.getFirstname()) && o.getLastname().equals(person.getLastname())) {
+				medicalRecords.add(o);
 				i.remove();
-				isFound = true;
 			}
 		}
-		return isFound;
+		return medicalRecords;
 	}
 
 }

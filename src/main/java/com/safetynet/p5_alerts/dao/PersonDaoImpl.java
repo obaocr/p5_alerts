@@ -112,18 +112,18 @@ public class PersonDaoImpl implements PersonDao {
 
 	// Suppression personne
 	@Override
-	public boolean deletePerson(PersonForAPIDelete person) {
-		boolean isFound = false;
+	public List<Person> deletePerson(PersonForAPIDelete person) {
 		log.debug("dPersonDao eletePerson : delete a person");
+		List<Person> persons = new ArrayList<>();
 		Iterator<Person> i = personData.iterator();
 		while (i.hasNext()) {
 			Person o = i.next();
 			if (o.getFirstname().equals(person.getFirstname()) && o.getLastname().equals(person.getLastname())) {
+				persons.add(o);
 				i.remove();
-				isFound = true;
 			}
 		}
-		return isFound;
+		return persons;
 	}
 
 }

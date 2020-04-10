@@ -13,5 +13,5 @@ public interface MedicalRecordDao {
 	public MedicalRecord searchByName(String firstName, String lastName);
 	public boolean addMedicalRecord(MedicalRecord medicalRecord);
 	public boolean updateMedicalRecord(MedicalRecord medicalRecord);
-	public boolean deleteMedicalRecord(PersonForAPIDelete person);
+	public List<MedicalRecord> deleteMedicalRecord(PersonForAPIDelete person);
 }

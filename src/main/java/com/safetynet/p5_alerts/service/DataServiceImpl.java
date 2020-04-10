@@ -24,7 +24,6 @@ import com.safetynet.p5_alerts.dao.MedicalRecordDao;
 import com.safetynet.p5_alerts.dao.MedicalRecordDaoImpl;
 import com.safetynet.p5_alerts.dao.PersonDao;
 import com.safetynet.p5_alerts.dao.PersonDaoImpl;
-import com.safetynet.p5_alerts.model.Data;
 import com.safetynet.p5_alerts.model.FireStation;
 import com.safetynet.p5_alerts.model.MedicalRecord;
 import com.safetynet.p5_alerts.model.Person;
@@ -40,19 +39,14 @@ public class DataServiceImpl implements DataService {
 	
 	@Value("${custom.filename}")
 	private String filename;
-
+	
 	private List<Person> persons = new ArrayList<>();
 	private List<FireStation> firestations = new ArrayList<>();
 	private List<MedicalRecord> medicalrecords = new ArrayList<>();
-	private String dataRessourceName;
-
+	
 	private PersonDao personDao;
 	private FireStationDao fireStationDao;
 	private MedicalRecordDao medicalRecordDao;
-
-	public DataServiceImpl(String dataRessourceName) {
-		this.dataRessourceName = dataRessourceName;
-	}
 
 	public DataServiceImpl() {
 
@@ -106,11 +100,7 @@ public class DataServiceImpl implements DataService {
 			medicalrecords.clear();
 			log.debug("DataServiceImpl : loadPerson");
 			String pathFile = filename;
-			if (filename == null) {
-				pathFile = this.dataRessourceName;
-			}
-			log.info("loadData : debut / this.dataRessourceName / filename /  pathFile : " + this.dataRessourceName
-					+ "/" + filename + "/" + pathFile);
+			log.info("loadData : debut / filename /  pathFile : " + "/" + filename + "/" + pathFile);
 			String data = StreamUtils.copyToString(new ClassPathResource(pathFile).getInputStream(),
 					Charset.forName("UTF-8"));
 			JsonIterator jsoniterator = JsonIterator.parse(data);
@@ -121,13 +111,9 @@ public class DataServiceImpl implements DataService {
 			personAny.forEach(b -> loadPerson(b));
 			firestationAny.forEach(b -> loadFirestations(b));
 			medicalRecordAny.forEach(b -> loadMedicalRecords(b));
-			Data inputData = new Data();
-			inputData.setPersons(persons);
-			inputData.setFireStations(firestations);
-			inputData.setMedicalRecords(medicalrecords);
-			personDao = new PersonDaoImpl(inputData.getPersons());
- 			fireStationDao = new FireStationDaoImpl(inputData.getFireStation());
-			medicalRecordDao = new MedicalRecordDaoImpl(inputData.getMedicalRecords());
+			personDao = new PersonDaoImpl(persons);
+ 			fireStationDao = new FireStationDaoImpl(firestations);
+			medicalRecordDao = new MedicalRecordDaoImpl(medicalrecords);
 			//
 			String logchgt = "loadData / persons:" + persons.size() + " / firestations:" + firestations.size()
 					+ " / medicalrecords:" + medicalrecords.size();

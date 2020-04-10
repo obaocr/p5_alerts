@@ -44,7 +44,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 	}
 
 	@Override
-	public boolean deleteMedicalRecord(PersonForAPIDelete person) {
+	public List<MedicalRecord> deleteMedicalRecord(PersonForAPIDelete person) {
 		log.debug("MedicalRecordServiceImpl : deleteMedicalRecord");
 		return medicalRecordDao.deleteMedicalRecord(person);
 	}

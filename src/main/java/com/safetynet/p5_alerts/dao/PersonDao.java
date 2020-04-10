@@ -16,5 +16,5 @@ public interface PersonDao {
 	public CommunityEmail getCommunityEmails(String city);
 	public boolean addPerson(Person person);
 	public boolean updatePerson(Person person);
-	public boolean deletePerson(PersonForAPIDelete person);
+	public List<Person> deletePerson(PersonForAPIDelete person);
 }

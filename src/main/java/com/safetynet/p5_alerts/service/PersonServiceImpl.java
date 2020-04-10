@@ -41,7 +41,7 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@Override
-	public boolean deletePerson(PersonForAPIDelete person) {
+	public List<Person> deletePerson(PersonForAPIDelete person) {
 		log.debug("PersonServiceImpl : deletePerson");
 		return personDao.deletePerson(person);
 	}

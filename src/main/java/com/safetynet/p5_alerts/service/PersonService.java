@@ -16,5 +16,5 @@ public interface PersonService {
 
 	public boolean updatePerson(Person person);
 
-	public boolean deletePerson(PersonForAPIDelete person);
+	public List<Person> deletePerson(PersonForAPIDelete person);
 }
