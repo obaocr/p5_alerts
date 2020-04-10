@@ -26,7 +26,7 @@ class PersonDaoTest {
 	@Test
 	void getAllTest() {
 		Person person = new Person();
-		person.setFirstname("Maria");
+		person.setFirstname("Olivia");
 		person.setLastname("Martinez");
 		person.setAddress("address");
 		person.setCity("Versailles");
@@ -55,13 +55,13 @@ class PersonDaoTest {
 	void searchByAddressTest() {
 		int nbPersons = personDao.getAll().size();
 		Person.Builder personlBuilder = new Person.Builder();
-		Person p = personlBuilder.setFirstname("Alex").setLastname("Martinez").setAddress("15 rue des olivier")
+		Person p = personlBuilder.setFirstname("Alex").setLastname("Martinez").setAddress("15 rue des oliviers")
 				.setCity("Montelimar").setZip("zip").setPhone("phone").setEmail("email").build();
 		personDao.addPerson(p);
 		int nbPersons2 = personDao.getAll().size();
-		persons = personDao.searchByAddress("15 rue des olivier");
+		persons = personDao.searchByAddress("15 rue des oliviers");
 		assertTrue(nbPersons + 1 == nbPersons2);
-		assertTrue(persons.size() > 0);
+		assertTrue(persons.size() == 1);
 	}
 
 	@Test
