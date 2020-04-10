@@ -68,8 +68,7 @@ public class PersonController {
 	public DeleteResponseController deletePerson(@RequestBody PersonForAPIDelete person) {
 		log.debug("Detete a person");
 		checkInputPersonForAPIDelete(person);
-		List<Person> persons = new ArrayList<>();
-		persons =  personService.deletePerson(person);
+		List<Person> persons = personService.deletePerson(person);
 		DeleteResponseController deleteResponseController = new DeleteResponseController();
 		deleteResponseController.setNbOfItemDeleted(persons.size());
 		return deleteResponseController;

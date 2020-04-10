@@ -66,9 +66,8 @@ public class MedicalRecordController {
 	@DeleteMapping(value = "medicalrecord")
 	public DeleteResponseController deleteMedicalRecord(@RequestBody PersonForAPIDelete person) {
 		log.debug("Detete a medicalrecord");
-		List<MedicalRecord> medicalRecords = new ArrayList<>();
 		checkInputPersonForAPIDelete(person);
-		medicalRecords = medicalRecordService.deleteMedicalRecord(person);
+		List<MedicalRecord> medicalRecords = medicalRecordService.deleteMedicalRecord(person); 
 		DeleteResponseController deleteResponseController = new DeleteResponseController();
 		deleteResponseController.setNbOfItemDeleted(medicalRecords.size());
 		return deleteResponseController;
